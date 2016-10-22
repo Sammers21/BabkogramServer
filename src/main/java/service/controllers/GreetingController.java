@@ -1,8 +1,8 @@
-package App.controllers;
+package service.controllers;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import App.objects.Greeting;
+import service.objects.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

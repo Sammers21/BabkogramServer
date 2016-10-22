@@ -1,10 +1,10 @@
-package App;
+package service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan("App.controllers")
+@ComponentScan("service.controllers")
 @SpringBootApplication
 public class Application {
 

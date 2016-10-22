@@ -1,4 +1,4 @@
-package App.objects;
+package service.objects;
 
 public class Greeting {
 

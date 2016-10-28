@@ -7,6 +7,6 @@ how to build?
     $java -jar gs-rest-service-0.1.0.jar
     
    
-   available methods
-   =================
-    1. /greetings
+available methods
+=================
+1. /greetings

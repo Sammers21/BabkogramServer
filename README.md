@@ -10,3 +10,8 @@ how to build?
 available methods
 =================
 1. /greetings
+
+
+=================
+
+server specification - https://github.com/frnkySila/batya-api/blob/master/docs/source/index.rst

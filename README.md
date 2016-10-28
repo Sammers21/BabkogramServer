@@ -9,4 +9,4 @@ how to build?
    
    available methods
    =================
-1. /greetings
+    1. /greetings

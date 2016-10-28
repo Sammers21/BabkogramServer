@@ -1,7 +1,7 @@
 package repository;
 
-/**
- * Created by Павел on 28.10.2016.
- */
-public class MessageRepository {
+import entity.Message;
+import org.springframework.data.repository.CrudRepository;
+
+public interface MessageRepository extends CrudRepository<Message, Long> {
 }

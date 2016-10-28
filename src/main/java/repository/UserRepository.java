@@ -1,7 +1,9 @@
 package repository;
 
-/**
- * Created by Павел on 28.10.2016.
- */
-public class UserRepository {
+
+import entity.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long> {
+
 }

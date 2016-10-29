@@ -10,7 +10,24 @@ how to build?
 available methods
 =================
 1. /greetings
+2. /register
 
+    POST request with body
+    ---------------------
+    {
+        username : {usernamevalue}
+        password : {passwordvalue}
+    }
+    ---------------------
+    
+    response
+   ---------------------
+    {
+       token : {usernamevalue}      
+    }
+    ---------------------
+
+   
 
 =================
 

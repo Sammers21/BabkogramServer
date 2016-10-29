@@ -22,11 +22,13 @@ POST request with body
     
 
     
-response
+response(tokenvalue в данной версии всегда "kek")
  
     {
-       token : {usernamevalue}      
+       token : {tokenvalue}      
     }
+
+    
     
 
    

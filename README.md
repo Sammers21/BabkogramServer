@@ -22,7 +22,7 @@ POST request with body
     
 
     
-response(tokenvalue в данной версии всегда "kek")
+response(tokenvalue is alredy "kek"(in current version(i m so lazy(see you at morning))))
  
     {
        token : {tokenvalue}      

@@ -13,21 +13,21 @@ available methods
 2. /register
 
 POST request with body
-::
+
 
     {
         username : {usernamevalue}
         password : {passwordvalue}
     }
     
-..
+
     
 response
-   ---------------------
+ 
     {
        token : {usernamevalue}      
     }
-    ---------------------
+    
 
    
 

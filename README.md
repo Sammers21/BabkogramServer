@@ -12,7 +12,7 @@ available methods
 1. /greetings
 2. /register
 
-    POST request with body
+POST request with body
 ::
 
     {
@@ -22,7 +22,7 @@ available methods
     
 ..
     
-    response
+response
    ---------------------
     {
        token : {usernamevalue}      

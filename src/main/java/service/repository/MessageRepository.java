@@ -1,7 +1,11 @@
-package repository;
+package service.repository;
 
-import entity.Message;
+import service.entity.Message;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface MessageRepository extends CrudRepository<Message, Long> {
+
+    List<Message> findByText(String text);
 }

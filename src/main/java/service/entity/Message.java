@@ -1,6 +1,4 @@
-package entity;
-
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+package service.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,5 +12,23 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private String text;
 
+    public Message(String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+
+        return text;
+    }
+
+    public Message() {
+
+    }
+
+    public long getId() {
+
+        return id;
+    }
 }

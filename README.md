@@ -1,10 +1,9 @@
 how to build?
 -------------
 
-
+    $ git clone "https://github.com/Sammers21/BatServer"
     $ mvn clean package
-    $ cd target
-    $ java -jar gs-rest-service-0.1.0.jar
+    $ mvn spring-boot:run
     
    
 available methods

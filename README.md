@@ -10,9 +10,10 @@ how to build?
 available methods
 =================
 1. /greetings
-2. /register
-
-POST request with body
+    
+2. /register 
+3. /login
+POST request with body fro both of login and register
 
 
     {
@@ -22,10 +23,14 @@ POST request with body
     
 
     
-response(tokenvalue is alredy "kek"(in current version(i m so lazy(see you at morning))))
+response
  
     {
        token : {tokenvalue}      
+    }
+    or
+    {
+       error : "error message"      
     }
 
     

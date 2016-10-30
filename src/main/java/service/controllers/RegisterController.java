@@ -28,8 +28,12 @@ public class RegisterController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
+        log.info(String.format("someonce call register with json : %s", input.toString()));
+
         User byUsername = userRepository.findByUsername(input.getUsername());
+
         log.debug("usr " + byUsername);
+
         if (byUsername == null) {
 
             Token token = Token.generate(userRepository);

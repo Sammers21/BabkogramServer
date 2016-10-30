@@ -13,6 +13,7 @@ available methods
     
 2. /register 
 3. /login
+
 POST request with body fro both of login and register
 
 

@@ -28,7 +28,9 @@ response
     {
        token : {tokenvalue}      
     }
+    
     or
+    
     {
        error : "error message"      
     }
@@ -40,4 +42,4 @@ response
 
 =================
 
-server specification - https://github.com/frnkySila/batya-api/blob/master/docs/source/index.rst
+server specification - http://batya-api.readthedocs.io/en/latest/

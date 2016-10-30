@@ -18,9 +18,9 @@ import service.repository.UserRepository;
 import java.util.Iterator;
 
 @RestController
-@RequestMapping("/register")
-public class RegisterController {
-    private static final Logger log = Logger.getLogger(RegisterController.class.getName());
+@RequestMapping("/login")
+public class LoginController {
+    private static final Logger log = Logger.getLogger(LoginController.class.getName());
 
     @Autowired
     UserRepository userRepository;
@@ -28,23 +28,23 @@ public class RegisterController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
-        log.info(String.format("someonce call register with json : %s", input.toString()));
+        log.info(String.format("someone call login with json : %s", input.toString()));
 
         User byUsername = userRepository.findByUsername(input.getUsername());
 
         if (byUsername == null) {
+            return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Invalid username or password"), HttpStatus.FORBIDDEN);
+
+        } else if (byUsername.getPassword().equals(input.getPassword())) {
 
             Token token = Token.generate(userRepository);
 
-            User user = new User(input.getUsername(), input.getPassword());
-
-            user.setToken(token.toString());
-
-            userRepository.save(new User(input.getUsername(), input.getPassword()));
+            byUsername.setToken(token.toString());
 
             return new ResponseEntity<Token>(token, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Username already taken"), HttpStatus.FORBIDDEN);
         }
+
+        return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Invalid username or password"), HttpStatus.FORBIDDEN);
+
     }
 }

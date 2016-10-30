@@ -1,5 +1,6 @@
 package service;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,6 +21,7 @@ public class Application {
     private static final Logger log = Logger.getLogger(Application.class);
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
 
         SpringApplication.run(Application.class, args);
     }

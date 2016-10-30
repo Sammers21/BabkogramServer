@@ -1,7 +1,9 @@
 package service.controllers;
 
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +15,18 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
+import service.entity.User;
 import service.objects.RegisterUserObject;
+import service.repository.UserRepository;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -28,12 +34,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class RegisterControllerTest {
 
+    private static final Logger log = Logger.getLogger(RegisterController.class.getName());
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private MockMvc mvc;
 
-    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+    private MediaType contentType = new MediaType(
+            MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
-            Charset.forName("utf8"));
+            Charset.forName("utf8")
+    );
 
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
@@ -47,16 +60,35 @@ public class RegisterControllerTest {
                 this.mappingJackson2HttpMessageConverter);
     }
 
+
+
     @Test
     public void simpleRegisterTest() throws Exception {
+        userRepository.deleteAll();
         mvc.perform(post("/register")
-                .content(this.json(new RegisterUserObject("kek", "kek")))
+                .content(this.json(new RegisterUserObject("someusername", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"token\":\"kek\"}"));
+                .andExpect((ResultMatcher) jsonPath("$.token").isString());
+    }
 
+    @Test
+    public void invalidUsertTest() throws Exception {
+        userRepository.deleteAll();
+        userRepository.save(new User("someusername", "somepassword"));
+        User user = userRepository.findByUsername("someusername");
+        log.debug("usrn " + user.getUsername());
+        log.debug("psw " + user.getPassword());
+
+
+        mvc.perform(post("/register")
+                .content(this.json(new RegisterUserObject("someusername", "somepassword")))
+                .contentType(contentType))
+                .andExpect(status().isForbidden())
+                .andExpect((ResultMatcher) jsonPath("$.error").isString());
 
     }
+
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

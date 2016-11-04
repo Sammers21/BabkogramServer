@@ -40,7 +40,7 @@ response
 
 5. /{auth_token}/logoutall
 
-6./{auth_token}/messages/send/{dialog_id}
+6. /{auth_token}/messages/send/{dialog_id}
 
     
     

@@ -28,7 +28,7 @@ public class LogoutController {
     @Autowired
     private TokenRepository tokenRepository;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> logoutAllTokens(@PathVariable String auth_token) {
 
         log.debug("auth varible is " + auth_token);

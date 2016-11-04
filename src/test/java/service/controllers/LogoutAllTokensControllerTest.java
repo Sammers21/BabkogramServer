@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -72,7 +73,7 @@ public class LogoutAllTokensControllerTest {
     public void succesfullLogout() throws Exception {
 
 
-        mvc.perform(get("/bestToken/logoutall"))
+        mvc.perform(post("/bestToken/logoutall"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
 
@@ -83,7 +84,7 @@ public class LogoutAllTokensControllerTest {
     public void unSuccesfullLogout() throws Exception {
 
 
-        mvc.perform(get("/worstToken/logoutall"))
+        mvc.perform(post("/worstToken/logoutall"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error", is("Invalid auth_token")));
     }

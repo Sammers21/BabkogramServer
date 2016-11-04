@@ -70,7 +70,7 @@ public class LogoutControllerTest {
     public void succesfullLogout() throws Exception {
 
 
-        mvc.perform(get("/bestToken/logout"))
+        mvc.perform(post("/bestToken/logout"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
 
@@ -81,7 +81,7 @@ public class LogoutControllerTest {
     public void unSuccesfullLogout() throws Exception {
 
 
-        mvc.perform(get("/worstToken/logout"))
+        mvc.perform(post("/worstToken/logout"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error", is("Invalid auth_token")));
     }

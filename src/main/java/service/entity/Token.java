@@ -3,7 +3,6 @@ package service.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import service.objects.JSONToken;
 import service.repository.TokenRepository;
-import service.repository.UserRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

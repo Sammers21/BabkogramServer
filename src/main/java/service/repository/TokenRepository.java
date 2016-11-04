@@ -3,7 +3,6 @@ package service.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import service.entity.Token;
-import service.entity.User;
 
 import java.util.List;
 

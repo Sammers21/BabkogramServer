@@ -3,7 +3,6 @@ package service.controllers;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import service.entity.User;
 import service.objects.RegisterUserObject;
 import service.repository.UserRepository;
@@ -85,7 +83,7 @@ public class RegisterControllerTest {
                 .content(this.json(new RegisterUserObject("someusername", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isForbidden())
-                .andExpect((ResultMatcher) jsonPath("$.error").isString());
+                .andExpect(jsonPath("$.error").isString());
 
     }
 

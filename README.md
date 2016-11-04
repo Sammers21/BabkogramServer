@@ -36,6 +36,10 @@ response
        error : "error message"      
     }
 
+4. /{auth_token}/logout GET
+
+5. /{auth_token}/logoutall
+
     
     
 

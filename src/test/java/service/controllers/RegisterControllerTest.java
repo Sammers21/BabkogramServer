@@ -69,7 +69,7 @@ public class RegisterControllerTest {
                 .content(this.json(new RegisterUserObject("someusername", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.token").isString());
+                .andExpect( jsonPath("$.token").isString());
     }
 
     @Test

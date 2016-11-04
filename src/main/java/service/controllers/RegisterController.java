@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.User;
+import service.objects.JSONToken;
 import service.objects.RegisterUserObject;
-import service.objects.Token;
-import service.objects.AlredyTakenError;
+import service.entity.Token;
+import service.objects.ErrorResponseObject;
+import service.repository.TokenRepository;
 import service.repository.UserRepository;
-
-import java.util.Iterator;
 
 @RestController
 @RequestMapping("/register")
@@ -24,6 +24,9 @@ public class RegisterController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TokenRepository tokenRepository;
 
 
     @RequestMapping(method = RequestMethod.POST)
@@ -34,17 +37,15 @@ public class RegisterController {
 
         if (byUsername == null) {
 
-            Token token = Token.generate(userRepository);
+            Token token = Token.generate(tokenRepository, input.getUsername());
 
             User user = new User(input.getUsername(), input.getPassword());
 
-            user.setToken(token.toString());
-
             userRepository.save(new User(input.getUsername(), input.getPassword()));
 
-            return new ResponseEntity<Token>(token, HttpStatus.OK);
+            return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Username already taken"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }
 }

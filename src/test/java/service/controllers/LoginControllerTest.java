@@ -3,6 +3,7 @@ package service.controllers;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,35 +47,38 @@ public class LoginControllerTest {
             Charset.forName("utf8")
     );
 
-    private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    @Before
+    public void clean() {
+        userRepository.deleteAll();
+    }
 
 
     @Test
     public void invalidPassword() throws Exception {
-        userRepository.deleteAll();
+
         userRepository.save(new User("someusername", "somepassword"));
 
         mvc.perform(post("/login")
                 .content(this.json(new RegisterUserObject("someusername", "invalidpassword")))
                 .contentType(contentType))
                 .andExpect(status().isForbidden())
-                .andExpect((ResultMatcher) jsonPath("$.error").isString());
+                .andExpect(jsonPath("$.error").isString());
 
     }
 
+
     @Test
     public void validPassword() throws Exception {
-        userRepository.deleteAll();
+
         userRepository.save(new User("someusername", "somepassword"));
 
         mvc.perform(post("/login")
                 .content(this.json(new RegisterUserObject("someusername", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.token").isString());
+                .andExpect(jsonPath("$.token").isString());
 
     }
-
 
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
@@ -85,6 +89,9 @@ public class LoginControllerTest {
         Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }
+
+
+    private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

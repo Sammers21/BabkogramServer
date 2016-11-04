@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.User;
+import service.objects.JSONToken;
 import service.objects.RegisterUserObject;
-import service.objects.Token;
-import service.objects.AlredyTakenError;
+import service.entity.Token;
+import service.objects.ErrorResponseObject;
+import service.repository.TokenRepository;
 import service.repository.UserRepository;
-
-import java.util.Iterator;
 
 @RestController
 @RequestMapping("/login")
@@ -25,6 +25,9 @@ public class LoginController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    TokenRepository tokenRepository;
+
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
@@ -33,18 +36,16 @@ public class LoginController {
         User byUsername = userRepository.findByUsername(input.getUsername());
 
         if (byUsername == null) {
-            return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Invalid username or password"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
 
         } else if (byUsername.getPassword().equals(input.getPassword())) {
 
-            Token token = Token.generate(userRepository);
+            Token token = Token.generate(tokenRepository,byUsername.getUsername());
 
-            byUsername.setToken(token.toString());
-
-            return new ResponseEntity<Token>(token, HttpStatus.OK);
+            return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
         }
 
-        return new ResponseEntity<AlredyTakenError>(new AlredyTakenError("Invalid username or password"), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
 
     }
 }

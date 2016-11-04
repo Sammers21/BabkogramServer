@@ -1,14 +1,14 @@
 package service.objects;
 
 
-public class AlredyTakenError {
+public class ErrorResponseObject {
 
 
 
 
     private String error ;
 
-    public AlredyTakenError(String error) {
+    public ErrorResponseObject(String error) {
         this.error = error;
     }
 

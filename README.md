@@ -9,10 +9,10 @@ how to build?
    
 available methods
 =================
-1. /greetings
+1./greetings
     
-2. /register 
-3. /login
+2./register 
+3./login
 
 POST request with body for both of login and register
 
@@ -36,11 +36,11 @@ response
        error : "error message"      
     }
 
-4. /{auth_token}/logout GET
+4./{auth_token}/logout GET
 
-5. /{auth_token}/logoutall
+5./{auth_token}/logoutall
 
-6. /{auth_token}/messages/send/{dialog_id}
+6./{auth_token}/messages/send/{dialog_id}
 
     
     

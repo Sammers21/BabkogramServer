@@ -44,7 +44,7 @@ public class RegisterController {
 
         User user = new User(input.getUsername(), input.getPassword());
 
-        userRepository.save(new User(input.getUsername(), input.getPassword()));
+        userRepository.save(user);
         return token;
     }
 

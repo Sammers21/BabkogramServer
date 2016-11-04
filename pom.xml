@@ -5,17 +5,13 @@
 
     <groupId>org.batya.servrer</groupId>
     <artifactId>rest-server</artifactId>
-    <version>1.0.RELEASE</version>
+    <version>1.1.RELEASE</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.1.RELEASE</version>
     </parent>
-
-
-
-
 
     <dependencies>
         <!-- logger -->
@@ -25,6 +21,7 @@
             <version>1.2.14</version>
             <scope>runtime</scope>
         </dependency>
+
         <!-- boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -34,7 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
 
         <!--json-->
         <dependency>
@@ -58,17 +54,17 @@
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
+            <version>${persistence-api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-
     </dependencies>
 
     <properties>
         <java.version>1.8</java.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
     </properties>
 
 

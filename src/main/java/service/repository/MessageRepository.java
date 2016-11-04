@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface MessageRepository extends CrudRepository<Message, Long> {
 
-    List<Message> findByText(String text);
+    List<Message> findByContent(String content);
+
+    Message findByGuid(String guid);
+
 }

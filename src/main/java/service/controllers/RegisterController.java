@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.User;
-import service.objects.JSONToken;
 import service.objects.RegisterUserObject;
 import service.entity.Token;
 import service.objects.ErrorResponseObject;
@@ -34,9 +33,9 @@ public class RegisterController {
         log.info(String.format("someonce call register with json : %s", input.toString()));
         if (!isRegistred(input.getUsername())) {
             Token token = getTokenAndSaveUserInRepository(input);
-            return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
+            return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }
 
@@ -51,9 +50,7 @@ public class RegisterController {
 
     private boolean isRegistred(String username) {
         User byUsername = userRepository.findByUsername(username);
-        if (byUsername == null)
-            return false;
-        return true;
+        return byUsername != null;
     }
 
 

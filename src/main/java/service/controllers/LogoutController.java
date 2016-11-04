@@ -31,13 +31,13 @@ public class LogoutController {
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> logoutAllTokens(@PathVariable String auth_token) {
 
-        log.debug(new StringBuilder().append("auth varible is ").append(auth_token).toString());
+        log.debug("auth varible is " + auth_token);
 
         Token token = tokenRepository.findByToken(auth_token);
         if (token == null) {
             log.info("Invalid auth_token");
 
-            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
         }
 
         log.debug("res of findbyToken query " + token);
@@ -47,15 +47,15 @@ public class LogoutController {
             log.info("auth_token without username has removed");
 
             tokenRepository.delete(token);
-            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
         } else {
             tokenRepository.delete(token);
 
-            log.info(new StringBuilder().append("token ").append(token.getToken()).append("has removed ").toString());
-            log.info(new StringBuilder().append("username ").append(user.getUsername()).append(" logged out").toString());
+            log.info("token " + token.getToken() + "has removed ");
+            log.info("username " + user.getUsername() + " logged out");
 
 
-            return new ResponseEntity<JSONMessage>(new JSONMessage("Logged out"), HttpStatus.OK);
+            return new ResponseEntity<>(new JSONMessage("Logged out"), HttpStatus.OK);
         }
 
 

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.User;
-import service.objects.JSONToken;
 import service.objects.RegisterUserObject;
 import service.entity.Token;
 import service.objects.ErrorResponseObject;
@@ -23,10 +22,10 @@ public class LoginController {
     private static final Logger log = Logger.getLogger(LoginController.class.getName());
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
 
     @RequestMapping(method = RequestMethod.POST)
@@ -36,13 +35,13 @@ public class LoginController {
         User byUsername = userRepository.findByUsername(input.getUsername());
 
         if (byUsername == null) {
-            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         } else if (byUsername.getPassword().equals(input.getPassword())) {
             Token token = Token.generate(tokenRepository, byUsername.getUsername());
 
-            return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
+            return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         }
 
     }

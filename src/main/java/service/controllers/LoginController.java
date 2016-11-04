@@ -40,6 +40,7 @@ public class LoginController {
         } else if (byUsername.getPassword().equals(input.getPassword())) {
             Token token = Token.generate(tokenRepository, byUsername.getUsername());
             log.info("succesfull login with " + input.getUsername());
+            log.info(input.getUsername() + " get token " + token.getToken().toString());
             return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
             log.info(" login fail with " + input.getUsername() + " and invalid password");

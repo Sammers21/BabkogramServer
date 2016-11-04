@@ -15,6 +15,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @RestController
@@ -43,7 +44,7 @@ public class SendMessageController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
 
         User sender = userRepository.findByUsername(token.getUsername());
-        if (checkUser(auth_token, token, sender))
+        if (checkUser(tokenRepository, auth_token, token, sender))
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
 
         if (dialog_id.charAt(0) == '+') {
@@ -62,23 +63,26 @@ public class SendMessageController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private boolean checkAndSend(@RequestBody JSONInputRequestMessage jsonInputRequestMessage, User sender, User receiver) {
+    public boolean checkAndSend(@RequestBody JSONInputRequestMessage jsonInputRequestMessage, User sender, User receiver) {
         if (receiver == null) {
             return true;
         } else {
 
-            Message message = new Message(genereteGuid(),
+            Message message = new Message(
+                    Instant.now().getEpochSecond(),
+                    genereteGuid(messageRepository),
                     jsonInputRequestMessage.getType(),
                     jsonInputRequestMessage.getContent(),
                     sender.getUsername(),
-                    receiver.getUsername());
+                    receiver.getUsername()
+            );
             messageRepository.save(message);
             log.debug("message has been sent");
         }
         return false;
     }
 
-    private boolean checkToken(@PathVariable String auth_token, Token token) {
+    static boolean checkToken(@PathVariable String auth_token, Token token) {
         if (token == null) {
             log.info("invalid token " + auth_token);
             return true;
@@ -86,7 +90,7 @@ public class SendMessageController {
         return false;
     }
 
-    private boolean checkUser(@PathVariable String auth_token, Token token, User sender) {
+    static boolean checkUser(TokenRepository tokenRepository, @PathVariable String auth_token, Token token, User sender) {
         if (sender == null) {
             log.info("no such users with token " + auth_token);
             log.debug("delete token " + auth_token);
@@ -96,7 +100,7 @@ public class SendMessageController {
         return false;
     }
 
-    public String genereteGuid() {
+    public static String genereteGuid(MessageRepository messageRepository) {
         UUID randomUUID;
 
         do {

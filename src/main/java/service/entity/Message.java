@@ -1,11 +1,16 @@
 package service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import service.objects.JSONInputRequestMessage;
+import service.repository.MessageRepository;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.Instant;
+
+import static service.controllers.SendMessageController.genereteGuid;
 
 @Entity
 public class Message {
@@ -21,16 +26,45 @@ public class Message {
 
     private String content;
 
+    @JsonIgnore
     private String fromUsername;
 
+    @JsonIgnore
     private String toUsername;
 
-    public Message(String guid, String type, String content, String fromUsername, String toUsername) {
+
+    @Override
+    public String toString() {
+        return "{" +
+                "guid='" + guid + '\'' +
+                ", type='" + type + '\'' +
+                ", content='" + content + '\'' +
+                ", fromUsername='" + fromUsername + '\'' +
+                ", toUsername='" + toUsername + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
+
+    private long timestamp;
+
+    public Message(long timestamp, String guid, String type, String content, String fromUsername, String toUsername) {
         this.guid = guid;
         this.type = type;
         this.content = content;
         this.fromUsername = fromUsername;
         this.toUsername = toUsername;
+        this.timestamp = timestamp;
+    }
+
+    public static Message getFromJSONinput(JSONInputRequestMessage js, String from, String to, MessageRepository messageRepository) {
+        return new Message(
+                Instant.now().getEpochSecond(),
+                genereteGuid(messageRepository),
+                js.getType(),
+                js.getContent(),
+                from,
+                to
+        );
     }
 
 

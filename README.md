@@ -43,6 +43,10 @@ response
 
 6./{auth_token}/messages/send/{dialog_id} POST
 
+7./{auth_token}/contacts GET
+
+8./{auth_token}/contacts/offset/{offset} GET
+
     
     
 

@@ -37,9 +37,9 @@ response
        error : "error message"      
     }
 
-4./{auth_token}/logout POST
+4./{auth_token}/logout both of GET and POST 
 
-5./{auth_token}/logoutall POST
+5./{auth_token}/logoutall POST both of GET and POST 
 
 6./{auth_token}/messages/send/{dialog_id} POST
 

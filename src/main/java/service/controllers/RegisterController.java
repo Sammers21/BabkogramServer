@@ -33,8 +33,10 @@ public class RegisterController {
         log.info(String.format("someonce call register with json : %s", input.toString()));
         if (!isRegistred(input.getUsername())) {
             Token token = getTokenAndSaveUserInRepository(input);
+            log.info("Username " + input.getUsername() + " been register");
             return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
+            log.info("Username " + input.getUsername() + " already taken");
             return new ResponseEntity<>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }

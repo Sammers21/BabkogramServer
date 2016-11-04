@@ -88,6 +88,18 @@ public class SendMessageControllerTest {
 
 
     }
+    @Test
+    public void notFoudTest() throws Exception {
+
+
+        mvc.perform(get("/bestToken/messages/send/ilia/somemethod"))
+                .andExpect(status().isNotFound());
+
+
+        assertTrue(messageRepository.findByContent("hello ilia").size() == 1);
+
+
+    }
 
 
     @Autowired

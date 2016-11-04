@@ -23,29 +23,38 @@ public class RegisterController {
     private static final Logger log = Logger.getLogger(RegisterController.class.getName());
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
         log.info(String.format("someonce call register with json : %s", input.toString()));
-
-        User byUsername = userRepository.findByUsername(input.getUsername());
-
-        if (byUsername == null) {
-
-            Token token = Token.generate(tokenRepository, input.getUsername());
-
-            User user = new User(input.getUsername(), input.getPassword());
-
-            userRepository.save(new User(input.getUsername(), input.getPassword()));
-
+        if (!isRegistred(input.getUsername())) {
+            Token token = getTokenAndSaveUserInRepository(input);
             return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
         } else {
             return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }
+
+    private Token getTokenAndSaveUserInRepository(RegisterUserObject input) {
+        Token token = Token.generate(tokenRepository, input.getUsername());
+
+        User user = new User(input.getUsername(), input.getPassword());
+
+        userRepository.save(new User(input.getUsername(), input.getPassword()));
+        return token;
+    }
+
+    private boolean isRegistred(String username) {
+        User byUsername = userRepository.findByUsername(username);
+        if (byUsername == null)
+            return false;
+        return true;
+    }
+
+
 }

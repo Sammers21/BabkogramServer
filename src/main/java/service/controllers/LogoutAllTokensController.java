@@ -48,22 +48,22 @@ public class LogoutAllTokensController {
         log.debug("res of findbyUsername query " + token);
         if (user == null) {
             log.info("auth_token without username has removed");
-
             tokenRepository.delete(token);
             return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
-
         } else {
-            List<Token> TokenList = tokenRepository.findByUsername(user.getUsername());
-            for (int i = 0; i < TokenList.size(); i++) {
-                tokenRepository.delete(TokenList.get(i));
-                log.info(new StringBuilder().append("token ").append(TokenList.get(i).getToken()).append("has removed ").toString());
-            }
-
+            deleteAllUsersTokens(user);
             log.info(new StringBuilder().append("username ").append(user.getUsername()).append(" logged out").toString());
-
             return new ResponseEntity<JSONMessage>(new JSONMessage("Logged out"), HttpStatus.OK);
         }
 
 
+    }
+
+    private void deleteAllUsersTokens(User user) {
+        List<Token> TokenList = tokenRepository.findByUsername(user.getUsername());
+        for (int i = 0; i < TokenList.size(); i++) {
+            tokenRepository.delete(TokenList.get(i));
+            log.info(new StringBuilder().append("token ").append(TokenList.get(i).getToken()).append("has removed ").toString());
+        }
     }
 }

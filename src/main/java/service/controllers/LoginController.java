@@ -37,15 +37,13 @@ public class LoginController {
 
         if (byUsername == null) {
             return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
-
         } else if (byUsername.getPassword().equals(input.getPassword())) {
-
-            Token token = Token.generate(tokenRepository,byUsername.getUsername());
+            Token token = Token.generate(tokenRepository, byUsername.getUsername());
 
             return new ResponseEntity<JSONToken>(token.getJSONObject(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         }
-
-        return new ResponseEntity<ErrorResponseObject>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
 
     }
 }

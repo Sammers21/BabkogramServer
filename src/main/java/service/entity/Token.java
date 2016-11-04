@@ -71,6 +71,8 @@ public class Token {
 
         } while (tokenRepository.findByToken(stringBuilder.toString()) != null);
 
+        tokenRepository.save(new Token(stringBuilder.toString(), username));
+
         return new Token(stringBuilder.toString(), username);
 
     }

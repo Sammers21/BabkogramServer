@@ -51,7 +51,7 @@ public class RegisterControllerTest {
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
 
-        this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream().filter(
+        this.mappingJackson2HttpMessageConverter = Arrays.stream(converters).filter(
                 hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().get();
 
         Assert.assertNotNull("the JSON message converter must not be null",

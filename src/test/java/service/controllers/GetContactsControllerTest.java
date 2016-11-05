@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
@@ -18,10 +19,10 @@ import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,12 +36,20 @@ public class GetContactsControllerTest {
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
 
     @Before
     public void setUp() throws Exception {
         BasicConfigurator.configure();
+        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+
+        tokenRepository.deleteAll();
+        userRepository.deleteAll();
+        messageRepository.deleteAll();
 
         User user1 = new User("pavel", "123");
         User user2 = new User("ilia", "123");
@@ -68,11 +77,18 @@ public class GetContactsControllerTest {
         messageRepository.save(helloFromDanil);
         messageRepository.save(helloFromIlia);
     }
+    @Test
+    public void getCustomCountOfContacts() throws Exception {
+        mockMvc.perform(get("/kek1/contacts/offset/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.dialogs[0].dialog_id",is("ilia")))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello")));
+    }
 
     @Test
     public void getDefaultCountOfContacts() throws Exception {
 
-        mvc.perform(get("/kek1/contacts"))
+        mockMvc.perform(get("/kek1/contacts"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.dialogs[0].dialog_id",is("danil")))
                 .andExpect(jsonPath("$.dialogs[1].dialog_id",is("ilia")))
@@ -81,12 +97,6 @@ public class GetContactsControllerTest {
 
     }
 
-    @Test
-    public void getCustomCountOfContacts() throws Exception {
-        mvc.perform(get("/kek1/contacts/offset/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dialogs[0].dialog_id",is("ilia")))
-                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello")));
-    }
+
 
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.Message;
 import service.entity.Token;
@@ -42,20 +43,26 @@ public class GetContactsController {
         this.messageRepository = messageRepository;
     }
 
-    @RequestMapping
-    ResponseEntity<?> getDefaultCountOfContacts(@PathVariable String auth_token) {
+    @RequestMapping(method = RequestMethod.GET)
+    ResponseEntity<?> getDefaultCountOfContacts(
+            @PathVariable String auth_token
+    ) {
+        log.info("mappig:/" + auth_token + "/contacts");
         log.info("defaultCount of contacts");
         return getResponseEntityWithOffSet(auth_token, 0);
     }
 
-    @RequestMapping(value = "/offset/{offset}")
-    ResponseEntity<?> getCustomCountOfContacts(@PathVariable String auth_token, @PathVariable Integer offset) {
-
+    @RequestMapping(value = "/offset/{offset}", method = RequestMethod.GET)
+    ResponseEntity<?> getCustomCountOfContacts(
+            @PathVariable String auth_token,
+            @PathVariable int offset) {
+        log.info("mappig:/" + auth_token + "/contacts" + "/offset/" + offset);
 
         return getResponseEntityWithOffSet(auth_token, offset);
     }
 
-    private ResponseEntity<?> getResponseEntityWithOffSet(@PathVariable String auth_token, int offcet) {
+    private ResponseEntity<?> getResponseEntityWithOffSet(
+            String auth_token, int offset) {
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
             log.info("invalid token");
@@ -67,7 +74,7 @@ public class GetContactsController {
             log.info("token without username");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(getContactsWithOffset(user.getUsername(), offcet), HttpStatus.OK);
+        return new ResponseEntity<>(getContactsWithOffset(user.getUsername(), offset), HttpStatus.OK);
     }
 
     private ContactsResponse getContactsWithOffset(String username, int offset) {

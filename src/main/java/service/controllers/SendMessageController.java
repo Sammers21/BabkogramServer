@@ -82,7 +82,7 @@ public class SendMessageController {
         return false;
     }
 
-    static boolean checkToken(@PathVariable String auth_token, Token token) {
+    static boolean checkToken(String auth_token, Token token) {
         if (token == null) {
             log.info("invalid token " + auth_token);
             return true;
@@ -90,7 +90,7 @@ public class SendMessageController {
         return false;
     }
 
-    static boolean checkUser(TokenRepository tokenRepository, @PathVariable String auth_token, Token token, User sender) {
+    static boolean checkUser(TokenRepository tokenRepository, String auth_token, Token token, User sender) {
         if (sender == null) {
             log.info("no such users with token " + auth_token);
             log.debug("delete token " + auth_token);

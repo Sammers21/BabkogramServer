@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
-    public static final Logger log=Logger.getLogger(GreetingController.class.getName());
+    private static final Logger log=Logger.getLogger(GreetingController.class.getName());
 
     private static final String template = "Hello, %s!";
     private final AtomicLong counter = new AtomicLong();

@@ -47,6 +47,16 @@ response
 
 8./{auth_token}/contacts/offset/{offset} GET
 
+9./{auth_token}/messages/{dialog_id} GET
+
+10./{auth_token}/messages/{dialog_id}/limit/{limit} GET
+
+11./{auth_token}/messages/{dialog_id}/limit/{limit}/skip/{offset} GET
+
+12./{auth_token}/messages/{dialog_id}/after/{timestamp} GET
+
+13./after/{timestamp}/limit/{limit} GET
+
     
     
 

@@ -3,7 +3,7 @@ how to build?
 
     $ git clone "https://github.com/Sammers21/BatServer"
     $ cd BatServer
-    $ mvn clean package
+    $ mvn clean install
     $ mvn spring-boot:run
     
    

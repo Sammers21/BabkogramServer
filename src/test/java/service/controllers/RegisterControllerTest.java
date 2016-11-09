@@ -1,8 +1,10 @@
 package service.controllers;
 
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import service.entity.Token;
 import service.entity.User;
 import service.objects.RegisterUserObject;
 import service.repository.UserRepository;
@@ -57,7 +60,16 @@ public class RegisterControllerTest {
         Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }
+    @Before
+    public void setUp() {
 
+        BasicConfigurator.configure();
+
+        userRepository.deleteAll();
+
+
+
+    }
 
 
     @Test

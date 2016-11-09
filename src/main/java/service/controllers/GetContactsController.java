@@ -55,7 +55,8 @@ public class GetContactsController {
     @RequestMapping(value = "/offset/{offset}", method = RequestMethod.GET)
     ResponseEntity<?> getCustomCountOfContacts(
             @PathVariable String auth_token,
-            @PathVariable int offset) {
+            @PathVariable int offset
+    ) {
         log.info("mappig:/" + auth_token + "/contacts" + "/offset/" + offset);
 
         return getResponseEntityWithOffSet(auth_token, offset);

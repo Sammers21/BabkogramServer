@@ -47,7 +47,7 @@ public class LoginControllerTest {
     );
 
     @Before
-    public void clean() {
+    public void setUp() {
         userRepository.deleteAll();
     }
 

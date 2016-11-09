@@ -47,10 +47,9 @@ public class GetMessagesController {
             (
                     @PathVariable String auth_token,
                     @PathVariable String dialog_id,
-                    @PathVariable int limit
+                    @PathVariable int limit,
+                    @PathVariable long timestamp
             ) {
-
-
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
 
@@ -60,7 +59,6 @@ public class GetMessagesController {
                     @PathVariable String auth_token,
                     @PathVariable String dialog_id
             ) {
-
         return getMessages(auth_token, dialog_id, DEFAULT_COUNT_OF_MESSAGES, 0, 0);
     }
 
@@ -71,8 +69,6 @@ public class GetMessagesController {
                     @PathVariable String dialog_id,
                     @PathVariable int limit
             ) {
-
-
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
 
@@ -89,6 +85,15 @@ public class GetMessagesController {
         return getMessages(auth_token, dialog_id, limit, offset, 0);
     }
 
+    /**
+     * template request
+     * @param auth_token secret token
+     * @param dialog_id id of dialog
+     * @param limit limit of messages
+     * @param skip how much messages should be skipped
+     * @param timestamp UNIX timestapm
+     * @return suitable response <Error suitable too>
+     */
     private ResponseEntity<?> getMessages(
             String auth_token,
             String dialog_id,
@@ -108,22 +113,41 @@ public class GetMessagesController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
+        MessageResponse response = getMessageResponse(dialog_id, limit, skip, timestamp, user);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * create response for message dialog request
+     * @param dialog_id id of dialog
+     * @param limit limit of messages
+     * @param skip how much messages should be skipped
+     * @param timestamp UNIX timestapm
+     * @param user ref to User from which messages
+     * @return suitable response
+     */
+    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User user) {
         MessageResponse response = new MessageResponse();
+
+
         List<Message> messageList = response.getMessages();
 
+        //get all messages
         List<Message> list = messageRepository.findByToUsername(user.getUsername());
 
+        //filter messages
         List<Message> dialog = Arrays.asList((Message[]) list.stream().filter(
                 l ->
                         l.getFromUsername().equals(dialog_id)
                                 && l.getTimestamp() > timestamp
         ).toArray());
 
+        //fill response object
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
             messageList.add(list.get(i));
         }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return response;
     }
 
     private static final int DEFAULT_COUNT_OF_MESSAGES = 25;

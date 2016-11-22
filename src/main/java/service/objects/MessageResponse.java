@@ -8,21 +8,25 @@ import java.util.List;
 
 public class MessageResponse {
 
+
+
     public MessageResponse() {
     }
 
-    private List<Message> messages=new ArrayList<>();
+    public MessageResponse(List<MessageInResponse> messages) {
+        this.messages = messages;
+    }
 
-    public List<Message> getMessages() {
+    public List<MessageInResponse> getMessages() {
+
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(List<MessageInResponse> messages) {
         this.messages = messages;
     }
 
-    public MessageResponse(List<Message> messages) {
+    private List<MessageInResponse> messages=new ArrayList<>();
 
-        this.messages = messages;
-    }
+
 }

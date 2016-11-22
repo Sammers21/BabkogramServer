@@ -13,6 +13,7 @@ import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
+import service.objects.MessageInResponse;
 import service.objects.MessageResponse;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -20,6 +21,7 @@ import service.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static service.controllers.SendMessageController.checkToken;
 import static service.controllers.SendMessageController.checkUser;
@@ -124,28 +126,32 @@ public class GetMessagesController {
      * @param limit limit of messages
      * @param skip how much messages should be skipped
      * @param timestamp UNIX timestapm
-     * @param user ref to User from which messages
+     * @param toUser ref to User from which messages
      * @return suitable response
      */
-    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User user) {
+    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser) {
         MessageResponse response = new MessageResponse();
 
 
-        List<Message> messageList = response.getMessages();
+        List<MessageInResponse> messageList = response.getMessages();
 
         //get all messages
-        List<Message> list = messageRepository.findByToUsername(user.getUsername());
+        List<Message> toFrom = messageRepository.findByToUsernameAndFromUsername(toUser.getUsername(),dialog_id);
+        List<Message> FromTo = messageRepository.findByToUsernameAndFromUsername(dialog_id,toUser.getUsername());
+
+        toFrom.addAll(FromTo);
+
 
         //filter messages
-        List<Message> dialog = Arrays.asList((Message[]) list.stream().filter(
+        List<Message> dialog =  toFrom.stream().filter(
                 l ->
-                        l.getFromUsername().equals(dialog_id)
+                        ( l.getFromUsername().equals(dialog_id)||l.getToUsername().equals(dialog_id))
                                 && l.getTimestamp() > timestamp
-        ).toArray());
+        ).collect(Collectors.toList());
 
         //fill response object
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
-            messageList.add(list.get(i));
+            messageList.add(new MessageInResponse(toFrom.get(i).getFromUsername(),toFrom.get(i)));
         }
         return response;
     }

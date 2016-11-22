@@ -54,7 +54,6 @@ public class SendMessageControllerTest {
 
     @Before
     public void clean() {
-        BasicConfigurator.configure();
         userRepository.deleteAll();
         tokenRepository.deleteAll();
 

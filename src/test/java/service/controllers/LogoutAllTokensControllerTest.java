@@ -47,7 +47,6 @@ public class LogoutAllTokensControllerTest {
     @Before
     public void clean() {
 
-        BasicConfigurator.configure();
 
         userRepository.deleteAll();
         tokenRepository.deleteAll();

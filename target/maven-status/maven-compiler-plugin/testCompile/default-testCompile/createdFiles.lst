@@ -1,0 +1,8 @@
+service/controllers/GreetingControllerTest.class
+service/controllers/GetContactsControllerTest.class
+service/controllers/SendMessageControllerTest.class
+service/controllers/LoginControllerTest.class
+service/controllers/LogoutControllerTest.class
+service/entity/MessageTest.class
+service/controllers/RegisterControllerTest.class
+service/controllers/LogoutAllTokensControllerTest.class

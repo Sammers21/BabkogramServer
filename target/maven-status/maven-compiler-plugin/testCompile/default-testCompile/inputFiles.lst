@@ -1,0 +1,8 @@
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/LoginControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/GreetingControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/entity/MessageTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/LogoutControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/LogoutAllTokensControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/SendMessageControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/RegisterControllerTest.java
+/home/sammers21/Desktop/BatServer/src/test/java/service/controllers/GetContactsControllerTest.java

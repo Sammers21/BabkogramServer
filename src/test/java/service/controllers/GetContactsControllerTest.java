@@ -44,8 +44,7 @@ public class GetContactsControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        BasicConfigurator.configure();
-        this.mockMvc = webAppContextSetup(webApplicationContext).build();
+          this.mockMvc = webAppContextSetup(webApplicationContext).build();
 
         tokenRepository.deleteAll();
         userRepository.deleteAll();

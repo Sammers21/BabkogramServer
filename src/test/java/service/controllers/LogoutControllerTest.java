@@ -51,9 +51,6 @@ public class LogoutControllerTest {
 
     @Before
     public void clean() {
-
-        BasicConfigurator.configure();
-
         userRepository.deleteAll();
         tokenRepository.deleteAll();
 
@@ -75,8 +72,8 @@ public class LogoutControllerTest {
                 .andExpect(jsonPath("$.message", is("Logged out")));
 
 
-
     }
+
     @Test
     public void unSuccesfullLogout() throws Exception {
 

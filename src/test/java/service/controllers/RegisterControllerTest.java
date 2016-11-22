@@ -62,13 +62,7 @@ public class RegisterControllerTest {
     }
     @Before
     public void setUp() {
-
-        BasicConfigurator.configure();
-
         userRepository.deleteAll();
-
-
-
     }
 
 

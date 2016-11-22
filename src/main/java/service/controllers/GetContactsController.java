@@ -47,7 +47,7 @@ public class GetContactsController {
     ResponseEntity<?> getDefaultCountOfContacts(
             @PathVariable String auth_token
     ) {
-        log.info("mappig:/" + auth_token + "/contacts");
+        log.info("mapping:/" + auth_token + "/contacts");
         log.info("defaultCount of contacts");
         return getResponseEntityWithOffSet(auth_token, 0);
     }
@@ -57,7 +57,7 @@ public class GetContactsController {
             @PathVariable String auth_token,
             @PathVariable int offset
     ) {
-        log.info("mappig:/" + auth_token + "/contacts" + "/offset/" + offset);
+        log.info("mapping:/" + auth_token + "/contacts" + "/offset/" + offset);
 
         return getResponseEntityWithOffSet(auth_token, offset);
     }

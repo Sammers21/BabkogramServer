@@ -1,8 +1,6 @@
 package service.objects;
 
 
-import service.entity.Message;
-
 import java.util.ArrayList;
 import java.util.List;
 

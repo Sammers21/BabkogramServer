@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.Token;
 import service.entity.User;
@@ -24,12 +23,10 @@ import java.util.List;
 public class LogoutAllTokensController {
 
     private static final Logger log = Logger.getLogger(LogoutAllTokensController.class.getName());
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private TokenRepository tokenRepository;
+    private  TokenRepository tokenRepository;
 
     /**
      *  delete all tokens of some user

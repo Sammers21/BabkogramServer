@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("ALL")
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -28,7 +29,7 @@ public class MessageTest {
 
     @Test
     public void hello() throws IOException {
-        JSONInputRequestMessage message = new JSONInputRequestMessage("text", new String("hello"));
+        JSONInputRequestMessage message = new JSONInputRequestMessage("text", "hello");
 
         assertEquals(this.json(message),"{\"type\":\"text\",\"content\":\"hello\"}");
 

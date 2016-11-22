@@ -22,3 +22,5 @@
 # *.ipr
 .idea/
 rest-server.iml
+logs/*.log
+target

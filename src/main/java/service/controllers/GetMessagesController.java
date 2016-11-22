@@ -39,7 +39,7 @@ public class GetMessagesController {
                     @PathVariable String dialog_id,
                     @PathVariable long timestamp
             ) {
-
+        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp);
 
         return getMessages(auth_token, dialog_id, DEFAULT_COUNT_OF_MESSAGES, 0, timestamp);
     }
@@ -52,6 +52,8 @@ public class GetMessagesController {
                     @PathVariable int limit,
                     @PathVariable long timestamp
             ) {
+        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp + "/limit/" + limit);
+
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
 
@@ -61,6 +63,8 @@ public class GetMessagesController {
                     @PathVariable String auth_token,
                     @PathVariable String dialog_id
             ) {
+        log.info("mapping /" + auth_token + "/messages/" + dialog_id);
+
         return getMessages(auth_token, dialog_id, DEFAULT_COUNT_OF_MESSAGES, 0, 0);
     }
 
@@ -71,6 +75,8 @@ public class GetMessagesController {
                     @PathVariable String dialog_id,
                     @PathVariable int limit
             ) {
+        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit);
+
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
 
@@ -83,7 +89,7 @@ public class GetMessagesController {
                     @PathVariable int offset
             ) {
 
-
+        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit + "/skip/" + offset);
         return getMessages(auth_token, dialog_id, limit, offset, 0);
     }
 
@@ -143,6 +149,7 @@ public class GetMessagesController {
 
         toFrom.addAll(FromTo);
 
+        log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
 
         //filter messages
         List<Message> dialog = toFrom.stream().filter(
@@ -155,6 +162,11 @@ public class GetMessagesController {
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
             messageList.add(new MessageInResponse(toFrom.get(i).getFromUsername(), toFrom.get(i)));
         }
+        log.info("dialog between " + toUser.getUsername() +
+                " and " + dialog_id + " return "
+                + response.getMessages().size() +
+                "ones");
+
         return response;
     }
 

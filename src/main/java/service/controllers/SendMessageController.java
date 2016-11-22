@@ -36,9 +36,11 @@ public class SendMessageController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> sendMessage(@PathVariable String auth_token,
-                                  @PathVariable String dialog_id,
-                                  @RequestBody JSONInputRequestMessage jsonInputRequestMessage) {
+    ResponseEntity<?> sendMessage(
+            @PathVariable String auth_token,
+            @PathVariable String dialog_id,
+            @RequestBody JSONInputRequestMessage jsonInputRequestMessage
+    ) {
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token))
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
@@ -52,7 +54,7 @@ public class SendMessageController {
             //TODO
             //DIALOG INIT
         } else {
-            log.debug("deal with User");
+            log.debug("deal with user");
             User receiver = userRepository.findByUsername(dialog_id);
             if (checkAndSend(jsonInputRequestMessage, sender, receiver))
                 return new ResponseEntity<>(new ErrorResponseObject("no such receiver"), HttpStatus.FORBIDDEN);
@@ -63,7 +65,11 @@ public class SendMessageController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public boolean checkAndSend(@RequestBody JSONInputRequestMessage jsonInputRequestMessage, User sender, User receiver) {
+    public boolean checkAndSend(
+            @RequestBody JSONInputRequestMessage jsonInputRequestMessage,
+            User sender,
+            User receiver
+    ) {
         if (receiver == null) {
             return true;
         } else {
@@ -77,7 +83,10 @@ public class SendMessageController {
                     receiver.getUsername()
             );
             messageRepository.save(message);
-            log.debug("message has been sent");
+            log.debug("message with text" + message.getContent()
+                    + " from " + sender.getUsername() +
+                    " to " + receiver.getUsername() +
+                    " was send");
         }
         return false;
     }

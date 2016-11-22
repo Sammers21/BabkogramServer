@@ -28,8 +28,13 @@ public class RegisterController {
     private TokenRepository tokenRepository;
 
 
+    /**
+     * method who responsible for registr new users
+     * @param input register user data
+     * @return status of operation
+     */
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
+    ResponseEntity<?> registerNewUser(@RequestBody RegisterUserObject input) {
         log.info(String.format("someonce call register with json : %s", input.toString()));
         if (!isRegistred(input.getUsername())) {
             Token token = getTokenAndSaveUserInRepository(input);
@@ -41,6 +46,11 @@ public class RegisterController {
         }
     }
 
+    /**
+     * method to insert new token for current user
+     * @param input register user data
+     * @return token for new user
+     */
     private Token getTokenAndSaveUserInRepository(RegisterUserObject input) {
         Token token = Token.generate(tokenRepository, input.getUsername());
 
@@ -50,6 +60,11 @@ public class RegisterController {
         return token;
     }
 
+    /**
+     * check for registration method
+     * @param username username to check
+     * @return is this user within a database ?
+     */
     private boolean isRegistred(String username) {
         User byUsername = userRepository.findByUsername(username);
         return byUsername != null;

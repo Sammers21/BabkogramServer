@@ -43,6 +43,11 @@ public class GetContactsController {
         this.messageRepository = messageRepository;
     }
 
+    /**
+     * default method
+     * @param auth_token user's token
+     * @return response
+     */
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<?> getDefaultCountOfContacts(
             @PathVariable String auth_token
@@ -52,6 +57,13 @@ public class GetContactsController {
         return getResponseEntityWithOffSet(auth_token, 0);
     }
 
+    /**
+     * method to get not default count
+     *
+     * @param auth_token user's token
+     * @param offset how much dialogs should be skipped
+     * @return  response
+     */
     @RequestMapping(value = "/offset/{offset}", method = RequestMethod.GET)
     ResponseEntity<?> getCustomCountOfContacts(
             @PathVariable String auth_token,
@@ -62,6 +74,13 @@ public class GetContactsController {
         return getResponseEntityWithOffSet(auth_token, offset);
     }
 
+
+    /**
+     * method to realise following methods
+     * @param auth_token user's token
+     * @param offset how much dialogs should be skipped
+     * @return  response
+     */
     private ResponseEntity<?> getResponseEntityWithOffSet(
             String auth_token, int offset) {
         Token token = tokenRepository.findByToken(auth_token);
@@ -78,6 +97,12 @@ public class GetContactsController {
         return new ResponseEntity<>(getContactsWithOffset(user.getUsername(), offset), HttpStatus.OK);
     }
 
+    /**
+     * insert from repository method
+     * @param username user's token
+     * @param offset how much dialogs should be skipped
+     * @return response
+     */
     private ContactsResponse getContactsWithOffset(String username, int offset) {
         ContactsResponse contactsResponse = new ContactsResponse();
 

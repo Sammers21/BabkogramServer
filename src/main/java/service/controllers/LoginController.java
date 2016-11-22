@@ -28,8 +28,15 @@ public class LoginController {
     private TokenRepository tokenRepository;
 
 
+    /**
+     * method who responsible for login
+     * @param input params to login
+     * @return status
+     */
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> generateToken(@RequestBody RegisterUserObject input) {
+    ResponseEntity<?> loginUser(
+            @RequestBody RegisterUserObject input
+    ) {
         log.info(String.format("someone call login with json : %s", input.toString()));
 
         User byUsername = userRepository.findByUsername(input.getUsername());
@@ -40,7 +47,7 @@ public class LoginController {
         } else if (byUsername.getPassword().equals(input.getPassword())) {
             Token token = Token.generate(tokenRepository, byUsername.getUsername());
             log.info("succesfull login with " + input.getUsername());
-            log.info(input.getUsername() + " get token " + token.getToken().toString());
+            log.info(input.getUsername() + " get token " + token.getToken());
             return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
             log.info(" login fail with " + input.getUsername() + " and invalid password");

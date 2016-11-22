@@ -35,6 +35,13 @@ public class SendMessageController {
         this.messageRepository = messageRepository;
     }
 
+    /**
+     * method which is responsible for sending messages
+     * @param auth_token user's token
+     * @param dialog_id dialod who will receive
+     * @param jsonInputRequestMessage message to sent
+     * @return status
+     */
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> sendMessage(
             @PathVariable String auth_token,
@@ -65,7 +72,14 @@ public class SendMessageController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public boolean checkAndSend(
+    /**
+     * operation to send message
+     * @param jsonInputRequestMessage message to sent
+     * @param sender user who send
+     * @param receiver user who receive
+     * @return status
+     */
+    private boolean checkAndSend(
             @RequestBody JSONInputRequestMessage jsonInputRequestMessage,
             User sender,
             User receiver
@@ -91,6 +105,12 @@ public class SendMessageController {
         return false;
     }
 
+    /**
+     * check some token for existence
+     * @param auth_token auth_token to check
+     * @param token token obj
+     * @return status
+     */
     static boolean checkToken(String auth_token, Token token) {
         if (token == null) {
             log.info("invalid token " + auth_token);
@@ -109,6 +129,11 @@ public class SendMessageController {
         return false;
     }
 
+    /**
+     * generate UUID
+     * @param messageRepository repo in which we need to insert new user
+     * @return UUID
+     */
     public static String genereteGuid(MessageRepository messageRepository) {
         UUID randomUUID;
 

@@ -31,10 +31,15 @@ public class LogoutAllTokensController {
     @Autowired
     private TokenRepository tokenRepository;
 
+    /**
+     *  delete all tokens of some user
+     * @param auth_token users token
+     * @return status of operation
+     */
     @RequestMapping
     ResponseEntity<?> logoutAllTokens(@PathVariable String auth_token) {
 
-        log.debug("auth varible is " + auth_token);
+        log.debug("auth_token is " + auth_token);
 
         Token token = tokenRepository.findByToken(auth_token);
         if (token == null) {
@@ -43,9 +48,7 @@ public class LogoutAllTokensController {
             return new ResponseEntity<>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
         }
 
-        log.debug("res of findbyToken query " + token);
         User user = userRepository.findByUsername(token.getUsername());
-        log.debug("res of findbyUsername query " + token);
         if (user == null) {
             log.info("auth_token without username has removed");
             tokenRepository.delete(token);
@@ -59,6 +62,10 @@ public class LogoutAllTokensController {
 
     }
 
+    /**
+     * this method delete all tokens of some user
+     * @param user user which tokens need to delete
+     */
     private void deleteAllUsersTokens(User user) {
         List<Token> TokenList = tokenRepository.findByUsername(user.getUsername());
         for (Token aTokenList : TokenList) {

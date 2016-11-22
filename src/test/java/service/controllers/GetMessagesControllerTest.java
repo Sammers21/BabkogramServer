@@ -63,18 +63,20 @@ public class GetMessagesControllerTest {
                 "danil",
                 "pavel",
                 messageRepository);
-
-
+        Thread.sleep(100);
         Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "ilia",
                 "pavel",
                 messageRepository);
+        Thread.sleep(1000);
         Message helloFromPavel = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "pavel",
                 "ilia",
                 messageRepository);
+        Thread.sleep(1000);
         messageRepository.save(helloFromDanil);
         messageRepository.save(helloFromIlia);
+        messageRepository.save(helloFromPavel);
 
     }
 
@@ -83,8 +85,9 @@ public class GetMessagesControllerTest {
 
         mockMvc.perform(get("/kek1/messages/ilia"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messages[0].message.content",is("hello")))
-                .andExpect(jsonPath("$.messages[0].dialog_id",is("ilia")));
+                .andExpect(jsonPath("$.messages[0].message.content", is("hello")))
+                .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")))
+                .andExpect(jsonPath("$.messages[1].dialog_id", is("pavel")));
     }
 
 }

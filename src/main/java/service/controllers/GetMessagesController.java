@@ -89,11 +89,12 @@ public class GetMessagesController {
 
     /**
      * template request
+     *
      * @param auth_token secret token
-     * @param dialog_id id of dialog
-     * @param limit limit of messages
-     * @param skip how much messages should be skipped
-     * @param timestamp UNIX timestapm
+     * @param dialog_id  id of dialog
+     * @param limit      limit of messages
+     * @param skip       how much messages should be skipped
+     * @param timestamp  UNIX timestapm
      * @return suitable response <Error suitable too>
      */
     private ResponseEntity<?> getMessages(
@@ -122,11 +123,12 @@ public class GetMessagesController {
 
     /**
      * create response for message dialog request
+     *
      * @param dialog_id id of dialog
-     * @param limit limit of messages
-     * @param skip how much messages should be skipped
+     * @param limit     limit of messages
+     * @param skip      how much messages should be skipped
      * @param timestamp UNIX timestapm
-     * @param toUser ref to User from which messages
+     * @param toUser    ref to User from which messages
      * @return suitable response
      */
     private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser) {
@@ -136,22 +138,22 @@ public class GetMessagesController {
         List<MessageInResponse> messageList = response.getMessages();
 
         //get all messages
-        List<Message> toFrom = messageRepository.findByToUsernameAndFromUsername(toUser.getUsername(),dialog_id);
-        List<Message> FromTo = messageRepository.findByToUsernameAndFromUsername(dialog_id,toUser.getUsername());
+        List<Message> toFrom = messageRepository.findByToUsernameAndFromUsername(toUser.getUsername(), dialog_id);
+        List<Message> FromTo = messageRepository.findByToUsernameAndFromUsername(dialog_id, toUser.getUsername());
 
         toFrom.addAll(FromTo);
 
 
         //filter messages
-        List<Message> dialog =  toFrom.stream().filter(
+        List<Message> dialog = toFrom.stream().filter(
                 l ->
-                        ( l.getFromUsername().equals(dialog_id)||l.getToUsername().equals(dialog_id))
+                        (l.getFromUsername().equals(dialog_id) || l.getToUsername().equals(dialog_id))
                                 && l.getTimestamp() > timestamp
-        ).collect(Collectors.toList());
+        ).sorted(Message::compareTo).collect(Collectors.toList());
 
         //fill response object
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
-            messageList.add(new MessageInResponse(toFrom.get(i).getFromUsername(),toFrom.get(i)));
+            messageList.add(new MessageInResponse(toFrom.get(i).getFromUsername(), toFrom.get(i)));
         }
         return response;
     }

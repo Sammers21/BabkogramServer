@@ -1,6 +1,7 @@
 package service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.expression.ExpressionException;
 import service.objects.JSONInputRequestMessage;
 import service.repository.MessageRepository;
 
@@ -13,7 +14,7 @@ import java.time.Instant;
 import static service.controllers.SendMessageController.genereteGuid;
 
 @Entity
-public class Message {
+public class Message implements Comparable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -139,5 +140,17 @@ public class Message {
     public long getId() {
 
         return id;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Message) {
+            if (((Message) o).timestamp > this.timestamp)
+                return -1;
+            else if (((Message) o).timestamp == this.timestamp) {
+                return 0;
+            } else return -1;
+        }
+        throw new ExpressionException("invalid compare");
     }
 }

@@ -37,31 +37,26 @@ public class GetMessagesControllerTest {
 
     @Before
     public void setUp() throws Exception {
-
         tokenRepository.deleteAll();
         userRepository.deleteAll();
         messageRepository.deleteAll();
-
         User user1 = new User("pavel", "123");
         User user2 = new User("ilia", "123");
         User user3 = new User("danil", "123");
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
-
-
         Token token = new Token("kek1", "pavel");
         Token token2 = new Token("kek2", "ilia");
         Token token3 = new Token("kek3", "danil");
         tokenRepository.save(token);
         tokenRepository.save(token2);
         tokenRepository.save(token3);
-
         Message helloFromDanil = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "danil",
                 "pavel",
                 messageRepository);
-        Thread.sleep(100);
+        Thread.sleep(1000);
         Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "ilia",
                 "pavel",
@@ -75,7 +70,6 @@ public class GetMessagesControllerTest {
         messageRepository.save(helloFromDanil);
         messageRepository.save(helloFromIlia);
         messageRepository.save(helloFromPavel);
-
     }
 
     @Test
@@ -87,5 +81,18 @@ public class GetMessagesControllerTest {
                 .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")))
                 .andExpect(jsonPath("$.messages[1].dialog_id", is("pavel")));
     }
+
+    @Test
+    public void getCustomLimitAndSkip() throws Exception {
+
+
+
+        mockMvc.perform(get("/kek1/messages/ilia/limit/100/skip/0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages[0].message.content", is("hello")))
+                .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")))
+                .andExpect(jsonPath("$.messages[1].dialog_id", is("pavel")));
+    }
+
 
 }

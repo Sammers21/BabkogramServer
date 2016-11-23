@@ -80,7 +80,7 @@ public class SendMessageController {
      * @return status
      */
     private boolean checkAndSend(
-            @RequestBody JSONInputRequestMessage jsonInputRequestMessage,
+            JSONInputRequestMessage jsonInputRequestMessage,
             User sender,
             User receiver
     ) {

@@ -164,6 +164,10 @@ public class GetMessagesController {
                 " and " + dialog_id + " return "
                 + response.getMessages().size() +
                 "ones");
+        if (messageList.size() > 2) {
+            log.debug("last message content " + messageList.get(messageList.size() - 1).getMessage().getContent());
+            log.debug("last message content " + messageList.get(0).getMessage().getContent());
+        }
 
         return response;
     }

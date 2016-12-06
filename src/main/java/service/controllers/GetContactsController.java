@@ -17,10 +17,9 @@ import service.objects.ErrorResponseObject;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
-import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -116,17 +115,18 @@ public class GetContactsController {
         List<Message> messages = messageRepository.findByToUsername(username);
         HashMap<String, Message> loginUserMap = new HashMap<>();
         for (Message message : messages) {
-            if (loginUserMap.containsKey(message.getFromUsername())
-                    && loginUserMap.get(message.getFromUsername()).getTimestamp() < message.getTimestamp()) {
-                loginUserMap.put(message.getFromUsername(), message);
+            if (loginUserMap.containsKey(message.getSender())
+                    && loginUserMap.get(message.getSender()).getTimestamp() < message.getTimestamp()) {
+                loginUserMap.put(message.getSender(), message);
             } else {
-                loginUserMap.put(message.getFromUsername(), message);
+                loginUserMap.put(message.getSender(), message);
             }
         }
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
+        Collections.reverse(uniqMessages);
         for (int i = offset; i < uniqMessages.size() && i - offset <= DEFAULT_COUNT_OF_CONTACTS; i++) {
-            Message message =uniqMessages.get(i);
-            Dialogs d = new Dialogs(message.getFromUsername(), message);
+            Message message = uniqMessages.get(i);
+            Dialogs d = new Dialogs(message.getSender(), message);
             dialogs.add(d);
         }
         log.debug("returned list of contacts: " + contactsResponse.getDialogs().size());

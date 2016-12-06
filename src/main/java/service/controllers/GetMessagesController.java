@@ -12,7 +12,6 @@ import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
-import service.objects.MessageInResponse;
 import service.objects.MessageResponse;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -140,11 +139,11 @@ public class GetMessagesController {
         MessageResponse response = new MessageResponse();
 
 
-        List<MessageInResponse> messageList = response.getMessages();
+        List<Message> messageList = response.getMessages();
 
         //get all messages
-        List<Message> toFrom = messageRepository.findByToUsernameAndFromUsername(toUser.getUsername(), dialog_id);
-        List<Message> FromTo = messageRepository.findByToUsernameAndFromUsername(dialog_id, toUser.getUsername());
+        List<Message> toFrom = messageRepository.findByToUsernameAndSender(toUser.getUsername(), dialog_id);
+        List<Message> FromTo = messageRepository.findByToUsernameAndSender(dialog_id, toUser.getUsername());
 
         toFrom.addAll(FromTo);
 
@@ -153,21 +152,21 @@ public class GetMessagesController {
         //filter messages
         List<Message> dialog = toFrom.stream().filter(
                 l ->
-                        (l.getFromUsername().equals(dialog_id) || l.getToUsername().equals(dialog_id))
+                        (l.getSender().equals(dialog_id) || l.getToUsername().equals(dialog_id))
                                 && l.getTimestamp() > timestamp
         ).sorted(Message::compareTo).collect(Collectors.toList());
         Collections.reverse(dialog);
         //fill response object
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
-            messageList.add(new MessageInResponse(dialog.get(i).getFromUsername(), dialog.get(i)));
+            messageList.add(dialog.get(i));
         }
         log.info("dialog between " + toUser.getUsername() +
                 " and " + dialog_id + " return "
                 + response.getMessages().size() +
                 "ones");
         if (messageList.size() > 2) {
-            log.debug("last message content " + messageList.get(messageList.size() - 1).getMessage().getContent());
-            log.debug("last message content " + messageList.get(0).getMessage().getContent());
+            log.debug("last message content " + messageList.get(messageList.size() - 1).getContent());
+            log.debug("last message content " + messageList.get(0).getContent());
         }
 
         return response;

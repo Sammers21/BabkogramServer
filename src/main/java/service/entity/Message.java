@@ -35,11 +35,11 @@ public class Message implements Comparable {
         this.timestamp = timestamp;
     }
 
-    @JsonIgnore
-    private String fromUsername;
+    private String sender;
 
     @JsonIgnore
     private String toUsername;
+
 
 
     @Override
@@ -48,7 +48,7 @@ public class Message implements Comparable {
                 "guid='" + guid + '\'' +
                 ", type='" + type + '\'' +
                 ", content='" + content + '\'' +
-                ", fromUsername='" + fromUsername + '\'' +
+                ", sender='" + sender + '\'' +
                 ", toUsername='" + toUsername + '\'' +
                 ", timestamp=" + timestamp +
                 '}';
@@ -56,11 +56,11 @@ public class Message implements Comparable {
 
     private long timestamp;
 
-    public Message(long timestamp, String guid, String type, String content, String fromUsername, String toUsername) {
+    public Message(long timestamp, String guid, String type, String content, String sender, String toUsername) {
         this.guid = guid;
         this.type = type;
         this.content = content;
-        this.fromUsername = fromUsername;
+        this.sender = sender;
         this.toUsername = toUsername;
         this.timestamp = timestamp;
     }
@@ -85,12 +85,12 @@ public class Message implements Comparable {
         this.guid = guid;
     }
 
-    public String getFromUsername() {
-        return fromUsername;
+    public String getSender() {
+        return sender;
     }
 
-    public void setFromUsername(String fromUsername) {
-        this.fromUsername = fromUsername;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public String getToUsername() {

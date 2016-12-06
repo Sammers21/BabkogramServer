@@ -18,6 +18,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -155,10 +156,10 @@ public class GetMessagesController {
                         (l.getFromUsername().equals(dialog_id) || l.getToUsername().equals(dialog_id))
                                 && l.getTimestamp() > timestamp
         ).sorted(Message::compareTo).collect(Collectors.toList());
-
+        Collections.reverse(dialog);
         //fill response object
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
-            messageList.add(new MessageInResponse(toFrom.get(i).getFromUsername(), toFrom.get(i)));
+            messageList.add(new MessageInResponse(dialog.get(i).getFromUsername(), dialog.get(i)));
         }
         log.info("dialog between " + toUser.getUsername() +
                 " and " + dialog_id + " return "

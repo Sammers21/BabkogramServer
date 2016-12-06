@@ -44,7 +44,7 @@ public class GetContactsControllerTest {
 
     @Before
     public void setUp() throws Exception {
-          this.mockMvc = webAppContextSetup(webApplicationContext).build();
+        this.mockMvc = webAppContextSetup(webApplicationContext).build();
 
         tokenRepository.deleteAll();
         userRepository.deleteAll();
@@ -67,35 +67,38 @@ public class GetContactsControllerTest {
                 "danil",
                 "pavel",
                 messageRepository);
-
-
         Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
+                "ilia",
+                "pavel",
+                messageRepository);
+        Thread.sleep(2000);
+        Message helloFromIlia2 = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloAgain"),
                 "ilia",
                 "pavel",
                 messageRepository);
         messageRepository.save(helloFromDanil);
         messageRepository.save(helloFromIlia);
+        messageRepository.save(helloFromIlia2);
     }
+
     @Test
     public void getCustomCountOfContacts() throws Exception {
         mockMvc.perform(get("/kek1/contacts/offset/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dialogs[0].dialog_id",is("ilia")))
-                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello")));
+                .andExpect(jsonPath("$.dialogs[0].dialog_id", is("danil")))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("hello")));
     }
 
     @Test
     public void getDefaultCountOfContacts() throws Exception {
-
         mockMvc.perform(get("/kek1/contacts"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dialogs[0].dialog_id",is("danil")))
-                .andExpect(jsonPath("$.dialogs[1].dialog_id",is("ilia")))
-                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello")))
-                .andExpect(jsonPath("$.dialogs[1].last_message.content",is("hello")));
+                .andExpect(jsonPath("$.dialogs[0].dialog_id", is("ilia")))
+                .andExpect(jsonPath("$.dialogs[1].dialog_id", is("danil")))
+                .andExpect(jsonPath("$.dialogs[1].last_message.content", is("hello")))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("helloAgain")));
 
     }
-
 
 
 }

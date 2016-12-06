@@ -17,9 +17,13 @@ import service.objects.ErrorResponseObject;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static service.controllers.SendMessageController.checkToken;
 import static service.controllers.SendMessageController.checkUser;
@@ -45,6 +49,7 @@ public class GetContactsController {
 
     /**
      * default method
+     *
      * @param auth_token user's token
      * @return response
      */
@@ -61,8 +66,8 @@ public class GetContactsController {
      * method to get not default count
      *
      * @param auth_token user's token
-     * @param offset how much dialogs should be skipped
-     * @return  response
+     * @param offset     how much dialogs should be skipped
+     * @return response
      */
     @RequestMapping(value = "/offset/{offset}", method = RequestMethod.GET)
     ResponseEntity<?> getCustomCountOfContacts(
@@ -77,9 +82,10 @@ public class GetContactsController {
 
     /**
      * method to realise following methods
+     *
      * @param auth_token user's token
-     * @param offset how much dialogs should be skipped
-     * @return  response
+     * @param offset     how much dialogs should be skipped
+     * @return response
      */
     private ResponseEntity<?> getResponseEntityWithOffSet(
             String auth_token, int offset) {
@@ -99,24 +105,31 @@ public class GetContactsController {
 
     /**
      * insert from repository method
+     *
      * @param username user's token
-     * @param offset how much dialogs should be skipped
+     * @param offset   how much dialogs should be skipped
      * @return response
      */
     private ContactsResponse getContactsWithOffset(String username, int offset) {
         ContactsResponse contactsResponse = new ContactsResponse();
-
         ArrayList<Dialogs> dialogs = contactsResponse.getDialogs();
-
         List<Message> messages = messageRepository.findByToUsername(username);
-
-        for (int i = offset; i < messages.size() && i - offset <= DEFAULT_COUNT_OF_CONTACTS; i++) {
-            Message message = messages.get(i);
+        HashMap<String, Message> loginUserMap = new HashMap<>();
+        for (Message message : messages) {
+            if (loginUserMap.containsKey(message.getFromUsername())
+                    && loginUserMap.get(message.getFromUsername()).getTimestamp() < message.getTimestamp()) {
+                loginUserMap.put(message.getFromUsername(), message);
+            } else {
+                loginUserMap.put(message.getFromUsername(), message);
+            }
+        }
+        List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
+        for (int i = offset; i < uniqMessages.size() && i - offset <= DEFAULT_COUNT_OF_CONTACTS; i++) {
+            Message message =uniqMessages.get(i);
             Dialogs d = new Dialogs(message.getFromUsername(), message);
             dialogs.add(d);
         }
-
-        log.debug("returned list of contacts" + contactsResponse);
+        log.debug("returned list of contacts: " + contactsResponse.getDialogs().size());
         return contactsResponse;
 
 

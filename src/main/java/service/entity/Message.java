@@ -145,8 +145,8 @@ public class Message implements Comparable {
     @Override
     public int compareTo(Object o) {
         if (o instanceof Message) {
-            if (((Message) o).timestamp > this.timestamp)
-                return -1;
+            if (((Message) o).timestamp < this.timestamp)
+                return 1;
             else if (((Message) o).timestamp == this.timestamp) {
                 return 0;
             } else return -1;

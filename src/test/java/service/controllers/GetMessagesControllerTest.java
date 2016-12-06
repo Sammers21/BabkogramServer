@@ -78,8 +78,8 @@ public class GetMessagesControllerTest {
         mockMvc.perform(get("/kek1/messages/ilia"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].message.content", is("hello")))
-                .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")))
-                .andExpect(jsonPath("$.messages[1].dialog_id", is("pavel")));
+                .andExpect(jsonPath("$.messages[0].dialog_id", is("pavel")))
+                .andExpect(jsonPath("$.messages[1].dialog_id", is("ilia")));
     }
 
     @Test
@@ -87,11 +87,11 @@ public class GetMessagesControllerTest {
 
 
 
-        mockMvc.perform(get("/kek1/messages/ilia/limit/100/skip/0"))
+        mockMvc.perform(get("/kek1/messages/ilia/limit/1/skip/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].message.content", is("hello")))
-                .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")))
-                .andExpect(jsonPath("$.messages[1].dialog_id", is("pavel")));
+                .andExpect(jsonPath("$.messages[0].dialog_id", is("ilia")));
+
     }
 
 

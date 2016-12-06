@@ -54,7 +54,7 @@ public class SendMessageController {
 
         User sender = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, sender))
-            return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(new ErrorResponseObject("Destination user does not exist"), HttpStatus.FORBIDDEN);
 
         if (dialog_id.charAt(0) == '+') {
             log.debug("deal with dialog");

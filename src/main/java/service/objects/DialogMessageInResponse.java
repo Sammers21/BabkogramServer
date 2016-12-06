@@ -3,16 +3,16 @@ package service.objects;
 import service.entity.Message;
 
 
-public class Dialogs {
+public class DialogMessageInResponse {
 
     private String dialog_id;
 
     private Message last_message;
 
-    public Dialogs() {
+    public DialogMessageInResponse() {
     }
 
-    public Dialogs(String dialog_id, Message last_message) {
+    public DialogMessageInResponse(String dialog_id, Message last_message) {
 
         this.dialog_id = dialog_id;
         this.last_message = last_message;

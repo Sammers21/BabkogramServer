@@ -12,7 +12,7 @@ import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
 import service.objects.ContactsResponse;
-import service.objects.Dialogs;
+import service.objects.DialogMessageInResponse;
 import service.objects.ErrorResponseObject;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -111,7 +111,7 @@ public class GetContactsController {
      */
     private ContactsResponse getContactsWithOffset(String username, int offset) {
         ContactsResponse contactsResponse = new ContactsResponse();
-        ArrayList<Dialogs> dialogs = contactsResponse.getDialogs();
+        ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
         List<Message> messages = messageRepository.findByToUsername(username);
         HashMap<String, Message> loginUserMap = new HashMap<>();
         for (Message message : messages) {
@@ -126,7 +126,7 @@ public class GetContactsController {
         Collections.reverse(uniqMessages);
         for (int i = offset; i < uniqMessages.size() && i - offset <= DEFAULT_COUNT_OF_CONTACTS; i++) {
             Message message = uniqMessages.get(i);
-            Dialogs d = new Dialogs(message.getSender(), message);
+            DialogMessageInResponse d = new DialogMessageInResponse(message.getSender(), message);
             dialogs.add(d);
         }
         log.debug("returned list of contacts: " + contactsResponse.getDialogs().size());

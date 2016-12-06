@@ -8,20 +8,20 @@ public class ContactsResponse {
     public ContactsResponse() {
     }
 
-    public ContactsResponse(ArrayList<Dialogs> dialogs) {
+    public ContactsResponse(ArrayList<DialogMessageInResponse> dialogs) {
 
         this.dialogs = dialogs;
     }
 
-    public ArrayList<Dialogs> getDialogs() {
+    public ArrayList<DialogMessageInResponse> getDialogs() {
         return dialogs;
     }
 
-    public void setDialogs(ArrayList<Dialogs> dialogs) {
+    public void setDialogs(ArrayList<DialogMessageInResponse> dialogs) {
         this.dialogs = dialogs;
     }
 
-    private  ArrayList<Dialogs> dialogs=new ArrayList<>();
+    private  ArrayList<DialogMessageInResponse> dialogs=new ArrayList<>();
 
     @Override
     public String toString() {

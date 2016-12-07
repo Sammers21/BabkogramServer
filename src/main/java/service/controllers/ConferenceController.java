@@ -9,14 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.*;
 
+/*
 @RestController
 @RequestMapping("/{auth_token}/conferences")
 public class ConferenceController {
-   /* @RequestMapping
+   */
+/* @RequestMapping
     ResponseEntity<?> getDefaultCountOfContacts(
             @PathVariable String auth_token
     ){
-      *//*  new
+      *//*
+*/
+/*  new
         return*//*
-    }*/
+*/
+/*
+    }*//*
+
 }
+*/

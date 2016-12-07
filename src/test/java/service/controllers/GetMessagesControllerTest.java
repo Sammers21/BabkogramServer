@@ -82,6 +82,9 @@ public class GetMessagesControllerTest {
                 .andExpect(jsonPath("$.messages[1].sender", is("ilia")));
     }
 
+
+
+
     @Test
     public void getCustomLimitAndSkip() throws Exception {
         mockMvc.perform(get("/kek1/messages/ilia/limit/1/skip/1"))

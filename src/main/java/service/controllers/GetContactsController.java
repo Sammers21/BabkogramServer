@@ -113,6 +113,7 @@ public class GetContactsController {
         ContactsResponse contactsResponse = new ContactsResponse();
         ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
         List<Message> messages = messageRepository.findByToUsername(username);
+        List<Message> messages2 = messageRepository.findBySender(username);
         HashMap<String, Message> loginUserMap = new HashMap<>();
         for (Message message : messages) {
             if (loginUserMap.containsKey(message.getSender())
@@ -120,6 +121,14 @@ public class GetContactsController {
                 loginUserMap.put(message.getSender(), message);
             } else {
                 loginUserMap.put(message.getSender(), message);
+            }
+        }
+        for (Message message : messages2) {
+            if (loginUserMap.containsKey(message.getToUsername())
+                    && loginUserMap.get(message.getToUsername()).getTimestamp() < message.getTimestamp()) {
+                loginUserMap.put(message.getToUsername(), message);
+            } else {
+                loginUserMap.put(message.getToUsername(), message);
             }
         }
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());

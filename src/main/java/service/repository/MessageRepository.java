@@ -13,6 +13,9 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 
     List<Message> findByToUsernameAndSender(String toUsername, String sender);
 
+    List<Message> findBySender( String sender);
+
+
     Message findByGuid(String guid);
 
 }

@@ -5,16 +5,16 @@ import org.springframework.expression.ExpressionException;
 import service.objects.JSONInputRequestMessage;
 import service.repository.MessageRepository;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 
 import static service.controllers.SendMessageController.genereteGuid;
 
 @Entity
-public class Message implements Comparable {
+public class Message implements Comparable, Serializable
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,6 +36,7 @@ public class Message implements Comparable {
     }
 
     private String sender;
+
 
     @JsonIgnore
     private String toUsername;

@@ -1,12 +1,13 @@
 package service.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -14,6 +15,17 @@ public class User {
     private String username;
 
     private String password;
+
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "USER_DIALOG",
+            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "DIALOG_ID", referencedColumnName = "id")
+
+    )
+    private Set<Dialog> dialogs;
 
     public long getId() {
         return id;

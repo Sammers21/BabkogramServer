@@ -13,6 +13,7 @@ import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
 import service.objects.MessageResponse;
+import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
@@ -178,12 +179,15 @@ public class GetMessagesController {
     private UserRepository userRepository;
     private TokenRepository tokenRepository;
     private MessageRepository messageRepository;
+    private DialogRepository dialogRepository;
 
     @Autowired
-    public GetMessagesController(UserRepository userRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+    public GetMessagesController(UserRepository userRepository, TokenRepository tokenRepository, MessageRepository messageRepository, DialogRepository dialogRepository) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
         this.messageRepository = messageRepository;
+        this.dialogRepository = dialogRepository;
+
     }
 
 

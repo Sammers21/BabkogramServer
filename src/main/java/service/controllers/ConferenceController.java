@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import service.entity.*;
 import service.entity.Dialog;
 import service.objects.ErrorResponseObject;
+import service.objects.ReturnDialogConferenceId;
 import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -35,9 +36,10 @@ public class ConferenceController {
     private MessageRepository messageRepository;
 
     @RequestMapping("/create")
-    ResponseEntity<?> getDefaultCountOfContacts(
+    ResponseEntity<?> createDialog(
             @PathVariable String auth_token
     ) {
+
 
 
         Token token = tokenRepository.findByToken(auth_token);
@@ -51,8 +53,8 @@ public class ConferenceController {
             log.info("token without username");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
-        new Dialog();
-        return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
+        Dialog generatedDialog = Dialog.generate(dialogRepository, user);
+        return new ResponseEntity<>(new ReturnDialogConferenceId(generatedDialog.getDialogName()), HttpStatus.OK);
 
     }
 

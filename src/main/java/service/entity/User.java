@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -16,7 +17,6 @@ public class User implements Serializable {
 
     private String password;
 
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -25,7 +25,15 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "DIALOG_ID", referencedColumnName = "id")
 
     )
-    private Set<Dialog> dialogs;
+    private Set<Dialog> dialogs = new HashSet<>();
+
+    public Set<Dialog> getDialogs() {
+        return dialogs;
+    }
+
+    public void setDialogs(Set<Dialog> dialogs) {
+        this.dialogs = dialogs;
+    }
 
     public long getId() {
         return id;

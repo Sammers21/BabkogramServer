@@ -29,12 +29,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ConferenceControllerTest {
     @Before
     public void setUp() throws Exception {
+        userRepository.deleteAll();
         User user1 = new User("pavel", "123");
         userRepository.save(user1);
         Token token = new Token("kek1", "pavel");
         tokenRepository.save(token);
-
-
     }
 
     @Test

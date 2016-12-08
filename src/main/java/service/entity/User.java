@@ -17,6 +17,15 @@ public class User implements Serializable {
 
     private String password;
 
+    public String getDisplayName() {
+
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     private String displayName;
 
     @JsonIgnore
@@ -65,5 +74,24 @@ public class User implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (!getUsername().equals(user.getUsername())) return false;
+        return getPassword().equals(user.getPassword());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUsername().hashCode();
+        result = 31 * result + getPassword().hashCode();
+        return result;
     }
 }

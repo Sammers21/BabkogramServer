@@ -19,8 +19,9 @@ public class Dialog implements Serializable {
     private String dialogId;
     private String dialogName;
     private String owner;
-    @ManyToMany(mappedBy = "dialogs")
-    private Set<User> userList =new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "dialogs", cascade = CascadeType.ALL)
+    private Set<User> userList = new HashSet<>();
 
     public static Dialog generate(DialogRepository dialogRepository, User owner) {
         Dialog dialog = new Dialog();
@@ -95,4 +96,23 @@ public class Dialog implements Serializable {
     }
 
     private static final Random rnd = new Random();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Dialog)) return false;
+
+        Dialog dialog = (Dialog) o;
+
+        if (!getDialogId().equals(dialog.getDialogId())) return false;
+        return owner.equals(dialog.owner);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getDialogId().hashCode();
+        result = 31 * result + owner.hashCode();
+        return result;
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import service.entity.Dialog;
 import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
@@ -50,5 +51,4 @@ public class BaseController {
         }
         return user;
     }
-
 }

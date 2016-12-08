@@ -15,6 +15,7 @@ import service.repository.DialogRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ConferenceControllerTest {
+    @Test
+    public void createDialog1() throws Exception {
+
+    }
+
     @Before
     public void setUp() throws Exception {
         userRepository.deleteAll();
@@ -40,9 +46,11 @@ public class ConferenceControllerTest {
     public void createDialog() throws Exception {
         mockMvc.perform(get("/kek1/conferences/create"))
                 .andExpect(status().isOk());
-        List<Dialog> s = dialogRepository.findByOwner("pavel");
-     //   int s2=s.get(0).getUserList().size();
-        assertEquals(dialogRepository.findByOwner("pavel").size(), 1);
+        Set<Dialog> dialogs = dialogRepository.findByOwner("pavel");
+        assertEquals(dialogs.size(), 1);
+     /*   for (Dialog dialog : dialogs) {
+            assertTrue(dialog.getUserList().size() > 0);
+        }*/
 
     }
 

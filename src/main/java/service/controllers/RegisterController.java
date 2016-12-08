@@ -13,20 +13,15 @@ import service.entity.User;
 import service.objects.RegisterUserObject;
 import service.entity.Token;
 import service.objects.ErrorResponseObject;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 @RestController
 @RequestMapping("/register")
-public class RegisterController {
+public class RegisterController extends BaseController {
     private static final Logger log = Logger.getLogger(RegisterController.class.getName());
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
 
     /**
      * method who responsible for registr new users
@@ -45,6 +40,7 @@ public class RegisterController {
             return new ResponseEntity<>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }
+
 
     /**
      * method to insert new token for current user
@@ -68,6 +64,11 @@ public class RegisterController {
     private boolean isRegistred(String username) {
         User byUsername = userRepository.findByUsername(username);
         return byUsername != null;
+    }
+
+    @Autowired
+    public RegisterController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 
 

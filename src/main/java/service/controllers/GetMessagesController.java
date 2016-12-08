@@ -28,8 +28,10 @@ import static service.controllers.SendMessageController.checkUser;
 
 @RestController
 @RequestMapping("/{auth_token}/messages/{dialog_id}")
-public class GetMessagesController {
+public class GetMessagesController  extends  BaseController{
     private static final Logger log = Logger.getLogger(GetMessagesController.class.getName());
+
+
 
     @RequestMapping(value = "/after/{timestamp}")
     ResponseEntity<?> getCustomMessageAfterSomeTime
@@ -175,19 +177,9 @@ public class GetMessagesController {
 
     private static final int DEFAULT_COUNT_OF_MESSAGES = 25;
 
-
-    private UserRepository userRepository;
-    private TokenRepository tokenRepository;
-    private MessageRepository messageRepository;
-    private DialogRepository dialogRepository;
-
     @Autowired
-    public GetMessagesController(UserRepository userRepository, TokenRepository tokenRepository, MessageRepository messageRepository, DialogRepository dialogRepository) {
-        this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
-        this.messageRepository = messageRepository;
-        this.dialogRepository = dialogRepository;
-
+    public GetMessagesController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 
 

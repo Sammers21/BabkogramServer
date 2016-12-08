@@ -11,6 +11,8 @@ import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
 import service.objects.JSONInputRequestMessage;
+import service.objects.TimeStampResponse;
+import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
@@ -20,25 +22,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/{auth_token}/messages/send/{dialog_id}")
-public class SendMessageController {
+public class SendMessageController extends BaseController {
 
     private static final Logger log = Logger.getLogger(SendMessageController.class.getName());
 
-    private UserRepository userRepository;
-    private TokenRepository tokenRepository;
-    private MessageRepository messageRepository;
-
-    @Autowired
-    public SendMessageController(UserRepository userRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
-        this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
-        this.messageRepository = messageRepository;
-    }
-
     /**
      * method which is responsible for sending messages
-     * @param auth_token user's token
-     * @param dialog_id dialod who will receive
+     *
+     * @param auth_token              user's token
+     * @param dialog_id               dialod who will receive
      * @param jsonInputRequestMessage message to sent
      * @return status
      */
@@ -69,14 +61,17 @@ public class SendMessageController {
 
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        TimeStampResponse tsr = new TimeStampResponse(Instant.now().getEpochSecond() + "");
+        return new ResponseEntity<>(tsr, HttpStatus.OK);
     }
+
 
     /**
      * operation to send message
+     *
      * @param jsonInputRequestMessage message to sent
-     * @param sender user who send
-     * @param receiver user who receive
+     * @param sender                  user who send
+     * @param receiver                user who receive
      * @return status
      */
     private boolean checkAndSend(
@@ -107,8 +102,9 @@ public class SendMessageController {
 
     /**
      * check some token for existence
+     *
      * @param auth_token auth_token to check
-     * @param token token obj
+     * @param token      token obj
      * @return status
      */
     static boolean checkToken(String auth_token, Token token) {
@@ -131,6 +127,7 @@ public class SendMessageController {
 
     /**
      * generate UUID
+     *
      * @param messageRepository repo in which we need to insert new user
      * @return UUID
      */
@@ -143,6 +140,11 @@ public class SendMessageController {
 
         return randomUUID.toString();
 
+    }
+
+    @Autowired
+    public SendMessageController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 
 

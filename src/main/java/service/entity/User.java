@@ -17,6 +17,8 @@ public class User implements Serializable {
 
     private String password;
 
+    private String displayName;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -53,6 +55,7 @@ public class User implements Serializable {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.displayName = username;
     }
 
     @Override

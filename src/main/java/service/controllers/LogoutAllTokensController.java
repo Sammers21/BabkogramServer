@@ -13,6 +13,8 @@ import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
 import service.objects.JSONMessage;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
@@ -20,13 +22,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/{auth_token}/logoutall")
-public class LogoutAllTokensController {
+public class LogoutAllTokensController extends BaseController {
 
     private static final Logger log = Logger.getLogger(LogoutAllTokensController.class.getName());
+
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private  TokenRepository tokenRepository;
+    public LogoutAllTokensController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
+    }
 
     /**
      *  delete all tokens of some user

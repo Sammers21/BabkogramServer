@@ -26,45 +26,27 @@ import static service.controllers.SendMessageController.checkUser;
 
 @RestController
 @RequestMapping("/{auth_token}/conferences")
-public class ConferenceController {
+public class ConferenceController extends BaseController {
     private static final Logger log = Logger.getLogger(ConferenceController.class.getName());
 
-
-    private DialogRepository dialogRepository;
-    private UserRepository userRepository;
-    private TokenRepository tokenRepository;
-    private MessageRepository messageRepository;
+    @Autowired
+    public ConferenceController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
+    }
 
     @RequestMapping("/create")
     ResponseEntity<?> createDialog(
             @PathVariable String auth_token
     ) {
-
-
-
-        Token token = tokenRepository.findByToken(auth_token);
-        if (checkToken(auth_token, token)) {
-            log.info("invalid token");
-            return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
-        }
-
-        User user = userRepository.findByUsername(token.getUsername());
-        if (checkUser(tokenRepository, auth_token, token, user)) {
-            log.info("token without username");
-            return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
+        User user = null;
+        try {
+            user = getUserFromDataBase(auth_token);
+        } catch (IllegalArgumentException e) {
+            new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
         }
         Dialog generatedDialog = Dialog.generate(dialogRepository, user);
         return new ResponseEntity<>(new ReturnDialogConferenceId(generatedDialog.getDialogName()), HttpStatus.OK);
-
     }
 
-
-    @Autowired
-    public ConferenceController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
-        this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
-        this.messageRepository = messageRepository;
-        this.dialogRepository = dialogRepository;
-    }
 
 }

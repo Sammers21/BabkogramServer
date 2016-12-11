@@ -46,8 +46,7 @@ public class ConferenceControllerTest {
     public void createDialog() throws Exception {
         mockMvc.perform(get("/kek1/conferences/create"))
                 .andExpect(status().isOk());
-        Set<Dialog> dialogs = dialogRepository.findByOwner("pavel");
-        assertEquals(dialogs.size(), 1);
+        assertTrue(dialogRepository.findByOwner("pavel").size() == 1);
      /*   for (Dialog dialog : dialogs) {
             assertTrue(dialog.getUserList().size() > 0);
         }*/

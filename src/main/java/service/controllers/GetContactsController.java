@@ -119,7 +119,7 @@ public class GetContactsController {
             if (loginUserMap.containsKey(message.getSender())
                     && loginUserMap.get(message.getSender()).getTimestamp() < message.getTimestamp()) {
                 loginUserMap.put(message.getSender(), message);
-            } else {
+            } else if (!loginUserMap.containsKey(message.getSender())) {
                 loginUserMap.put(message.getSender(), message);
             }
         }
@@ -127,8 +127,8 @@ public class GetContactsController {
             if (loginUserMap.containsKey(message.getToUsername())
                     && loginUserMap.get(message.getToUsername()).getTimestamp() < message.getTimestamp()) {
                 loginUserMap.put(message.getToUsername(), message);
-            } else {
-                loginUserMap.put(message.getToUsername(), message);
+            } else if (!loginUserMap.containsKey(message.getSender())) {
+                loginUserMap.put(message.getSender(), message);
             }
         }
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());

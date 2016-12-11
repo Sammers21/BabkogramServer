@@ -17,24 +17,6 @@ public class User implements Serializable {
 
     private String password;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "USER_DIALOG",
-            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "DIALOG_ID", referencedColumnName = "id")
-
-    )
-    private Set<Dialog> dialogs = new HashSet<>();
-
-    public Set<Dialog> getDialogs() {
-        return dialogs;
-    }
-
-    public void setDialogs(Set<Dialog> dialogs) {
-        this.dialogs = dialogs;
-    }
-
     public long getId() {
         return id;
     }

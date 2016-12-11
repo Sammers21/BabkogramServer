@@ -6,9 +6,8 @@ import service.repository.DialogRepository;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Dialog implements Serializable {
@@ -19,8 +18,7 @@ public class Dialog implements Serializable {
     private String dialogId;
     private String dialogName;
     private String owner;
-    @ManyToMany(mappedBy = "dialogs")
-    private Set<User> userList =new HashSet<>();
+    private String userList = "";
 
     public static Dialog generate(DialogRepository dialogRepository, User owner) {
         Dialog dialog = new Dialog();
@@ -38,14 +36,59 @@ public class Dialog implements Serializable {
         dialog.setDialogId("+" + stringBuilder.toString());
         dialog.setOwner(owner.getUsername());
         dialog.setDialogName(dialog.getDialogId());
-        dialog.getUserList().add(owner);
         dialogRepository.save(dialog);
-        owner.getDialogs().add(dialog);
         return dialog;
     }
 
-    public Dialog(String owner) {
-        this.owner = owner;
+    public boolean contains(String userName) {
+        return userList.contains(userName);
+    }
+
+    public void addUser(String userName) {
+        if (userList.equals("")) {
+            userList += userName;
+        } else if (!userList.contains(";")) {
+            if (!userList.equals(userName)) {
+                userList += ";" + userName;
+            }
+        } else {
+            List<String> s2 = Arrays.stream(userList.split(";"))
+                    .filter(s -> s.equals(userName))
+                    .collect(Collectors.toList());
+            if (s2.size() == 0) {
+                userList += ";" + userName;
+            }
+
+        }
+    }
+
+    public void deleteUser(String userName) {
+        if (userList.contains(userName)) {
+            if (!userList.contains(";")) {
+                userList = "";
+            } else {
+                List<String> s2 = Arrays.stream(userList.split(";"))
+                        .filter(s -> !s.equals(userName))
+                        .collect(Collectors.toList());
+                if (s2.size() == 1) {
+                    userList = s2.get(0);
+                } else {
+                    userList = s2.get(0);
+                    for (int i = 1; i < s2.size(); i++) {
+                        userList += ";" + s2.get(i);
+                    }
+                }
+            }
+        }
+
+    }
+
+    public List<String> getUserNameList() {
+        if (userList.equals(""))
+            return new ArrayList<String>();
+        if (!userList.contains(";"))
+            return Arrays.asList(userList);
+        return Arrays.stream(userList.split(";")).collect(Collectors.toList());
     }
 
     public void setOwner(String owner) {
@@ -78,20 +121,6 @@ public class Dialog implements Serializable {
 
     public void setDialogId(String dialogId) {
         this.dialogId = dialogId;
-    }
-
-    public Set<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(Set<User> userList) {
-        this.userList = userList;
-    }
-
-    public Dialog(String dialogId, Set<User> userList) {
-
-        this.dialogId = dialogId;
-        this.userList = userList;
     }
 
     private static final Random rnd = new Random();

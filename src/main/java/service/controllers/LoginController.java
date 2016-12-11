@@ -13,20 +13,15 @@ import service.entity.User;
 import service.objects.RegisterUserObject;
 import service.entity.Token;
 import service.objects.ErrorResponseObject;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 @RestController
 @RequestMapping("/login")
-public class LoginController {
+public class LoginController extends BaseController{
     private static final Logger log = Logger.getLogger(LoginController.class.getName());
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
 
     /**
      * method who responsible for login
@@ -54,5 +49,9 @@ public class LoginController {
             return new ResponseEntity<>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         }
 
+    }
+    @Autowired
+    public LoginController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 }

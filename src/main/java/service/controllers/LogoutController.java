@@ -12,20 +12,21 @@ import service.entity.Token;
 import service.entity.User;
 import service.objects.ErrorResponseObject;
 import service.objects.JSONMessage;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 @RestController
 @RequestMapping("/{auth_token}/logout")
-public class LogoutController {
+public class LogoutController extends BaseController {
 
     private static final Logger log = Logger.getLogger(LogoutController.class.getName());
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
+    public LogoutController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
+    }
 
     /**
      * remove current token of user

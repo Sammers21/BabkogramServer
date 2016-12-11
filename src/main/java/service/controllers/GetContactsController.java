@@ -14,6 +14,7 @@ import service.entity.User;
 import service.objects.ContactsResponse;
 import service.objects.DialogMessageInResponse;
 import service.objects.ErrorResponseObject;
+import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
@@ -29,21 +30,14 @@ import static service.controllers.SendMessageController.checkUser;
 
 @RestController
 @RequestMapping("/{auth_token}/contacts")
-public class GetContactsController {
+public class GetContactsController extends BaseController {
     private static final Logger log = Logger.getLogger(GetContactsController.class.getName());
 
     private static final long DEFAULT_COUNT_OF_CONTACTS = 25;
 
-
-    private UserRepository userRepository;
-    private TokenRepository tokenRepository;
-    private MessageRepository messageRepository;
-
     @Autowired
-    public GetContactsController(UserRepository userRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
-        this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
-        this.messageRepository = messageRepository;
+    public GetContactsController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {
+        super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 
     /**

@@ -17,6 +17,16 @@ public class User implements Serializable {
 
     private String password;
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    private String displayName;
+
     public long getId() {
         return id;
     }
@@ -35,6 +45,7 @@ public class User implements Serializable {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        setDisplayName(username);
     }
 
     @Override

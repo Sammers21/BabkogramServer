@@ -10,7 +10,4 @@ import java.util.Set;
 
 public interface DialogRepository extends CrudRepository<Dialog, Long> {
     Dialog findByDialogId(String dialogId);
-
-
-    Set<Dialog> findByOwner(String owner);
 }

@@ -53,16 +53,19 @@ public class GetContactsControllerTest {
         User user1 = new User("pavel", "123");
         User user2 = new User("ilia", "123");
         User user3 = new User("danil", "123");
+        User user4 = new User("BigBoss", "123");
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
-
+        userRepository.save(user4);
         Token token = new Token("kek1", "pavel");
         Token token2 = new Token("kek2", "ilia");
         Token token3 = new Token("kek3", "danil");
+        Token token4 = new Token("kek4", "BigBoss");
         tokenRepository.save(token);
         tokenRepository.save(token2);
         tokenRepository.save(token3);
+        tokenRepository.save(token4);
         Message helloFromDanil = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "danil",
                 "pavel",
@@ -80,6 +83,20 @@ public class GetContactsControllerTest {
         messageRepository.save(helloFromIlia);
         messageRepository.save(helloFromIlia2);
     }
+
+    @Test
+    public void getFromNoUser() throws Exception {
+        Message helloFROMBOSS = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
+                "BigBoss",
+                "danil",
+                messageRepository);
+        messageRepository.save(helloFROMBOSS);
+        mockMvc.perform(get("/kek4/contacts/offset/0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.dialogs[0].dialog_id", is("danil")))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("helloDanil")));
+    }
+
 
     @Test
     public void getCustomCountOfContacts() throws Exception {

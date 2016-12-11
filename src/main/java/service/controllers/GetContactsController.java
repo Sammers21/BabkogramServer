@@ -88,26 +88,27 @@ public class GetContactsController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
-        User user = userRepository.findByUsername(token.getUsername());
-        if (checkUser(tokenRepository, auth_token, token, user)) {
+        User current = userRepository.findByUsername(token.getUsername());
+        if (checkUser(tokenRepository, auth_token, token, current)) {
             log.info("token without username");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(getContactsWithOffset(user.getUsername(), offset), HttpStatus.OK);
+
+        return new ResponseEntity<>(getContactsWithOffset(current.getUsername(), offset), HttpStatus.OK);
     }
 
     /**
      * insert from repository method
      *
-     * @param username user's token
-     * @param offset   how much dialogs should be skipped
+     * @param currentUsername user's token
+     * @param offset          how much dialogs should be skipped
      * @return response
      */
-    private ContactsResponse getContactsWithOffset(String username, int offset) {
+    private ContactsResponse getContactsWithOffset(String currentUsername, int offset) {
         ContactsResponse contactsResponse = new ContactsResponse();
         ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
-        List<Message> messages = messageRepository.findByToUsername(username);
-        List<Message> messages2 = messageRepository.findBySender(username);
+        List<Message> messages = messageRepository.findByToUsername(currentUsername);
+        List<Message> messages2 = messageRepository.findBySender(currentUsername);
         HashMap<String, Message> loginUserMap = new HashMap<>();
         for (Message message : messages) {
             if (loginUserMap.containsKey(message.getSender())
@@ -121,15 +122,20 @@ public class GetContactsController extends BaseController {
             if (loginUserMap.containsKey(message.getToUsername())
                     && loginUserMap.get(message.getToUsername()).getTimestamp() < message.getTimestamp()) {
                 loginUserMap.put(message.getToUsername(), message);
-            } else if (!loginUserMap.containsKey(message.getSender())) {
-                loginUserMap.put(message.getSender(), message);
+            } else if (!loginUserMap.containsKey(message.getToUsername())) {
+                loginUserMap.put(message.getToUsername(), message);
             }
         }
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
         Collections.reverse(uniqMessages);
         for (int i = offset; i < uniqMessages.size() && i - offset <= DEFAULT_COUNT_OF_CONTACTS; i++) {
             Message message = uniqMessages.get(i);
-            DialogMessageInResponse d = new DialogMessageInResponse(message.getSender(), message);
+            DialogMessageInResponse d;
+            if (!message.getSender().equals(currentUsername)) {
+                d = new DialogMessageInResponse(message.getSender(), message);
+            } else {
+                d = new DialogMessageInResponse(message.getToUsername(), message);
+            }
             dialogs.add(d);
         }
         log.debug("returned list of contacts: " + contactsResponse.getDialogs().size());

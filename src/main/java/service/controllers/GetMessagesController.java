@@ -28,9 +28,8 @@ import static service.controllers.SendMessageController.checkUser;
 
 @RestController
 @RequestMapping("/{auth_token}/messages/{dialog_id}")
-public class GetMessagesController  extends  BaseController{
+public class GetMessagesController extends BaseController {
     private static final Logger log = Logger.getLogger(GetMessagesController.class.getName());
-
 
 
     @RequestMapping(value = "/after/{timestamp}")
@@ -163,6 +162,7 @@ public class GetMessagesController  extends  BaseController{
         for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
             messageList.add(dialog.get(i));
         }
+        Collections.reverse(messageList);
         log.info("dialog between " + toUser.getUsername() +
                 " and " + dialog_id + " return "
                 + response.getMessages().size() +

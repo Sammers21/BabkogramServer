@@ -12,6 +12,7 @@ import service.entity.Dialog;
 import service.entity.Token;
 import service.entity.User;
 import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
@@ -28,28 +29,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ConferenceControllerTest {
-    @Test
-    public void createDialog1() throws Exception {
-
-    }
 
     @Before
     public void setUp() throws Exception {
         userRepository.deleteAll();
-        User user1 = new User("pavel", "123");
+        dialogRepository.deleteAll();
+        tokenRepository.deleteAll();
+        messageRepository.deleteAll();
+
+        User user1 = new User("pavell", "123");
         userRepository.save(user1);
-        Token token = new Token("kek1", "pavel");
+        Token token = new Token("kek23", "pavell");
         tokenRepository.save(token);
     }
 
     @Test
     public void createDialog() throws Exception {
-        mockMvc.perform(get("/kek1/conferences/create"))
+        mockMvc.perform(get("/kek23/conferences/create"))
                 .andExpect(status().isOk());
-        assertTrue(dialogRepository.findByOwner("pavel").size() == 1);
-     /*   for (Dialog dialog : dialogs) {
-            assertTrue(dialog.getUserList().size() > 0);
-        }*/
+        assertTrue(dialogRepository.findByOwner("pavell").size() == 1);
 
     }
 
@@ -61,4 +59,6 @@ public class ConferenceControllerTest {
     private TokenRepository tokenRepository;
     @Autowired
     private DialogRepository dialogRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 }

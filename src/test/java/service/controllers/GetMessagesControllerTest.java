@@ -78,8 +78,8 @@ public class GetMessagesControllerTest {
         mockMvc.perform(get("/kek1/messages/ilia"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].content", is("hello")))
-                .andExpect(jsonPath("$.messages[0].sender", is("pavel")))
-                .andExpect(jsonPath("$.messages[1].sender", is("ilia")));
+                .andExpect(jsonPath("$.messages[0].sender", is("ilia")))
+                .andExpect(jsonPath("$.messages[1].sender", is("pavel")));
     }
 
 

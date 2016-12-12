@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import service.entity.Dialog;
 import service.entity.User;
+import service.objects.Dialog_IdResponse;
 import service.objects.ErrorResponseObject;
 import service.objects.JSONInputNewName;
 import service.repository.DialogRepository;
@@ -26,7 +24,22 @@ public class SetNameController extends BaseController {
         super(userRepository, dialogRepository, tokenRepository, messageRepository);
     }
 
-    @RequestMapping
+    @RequestMapping(value = "/{dialog_id}", method = RequestMethod.GET)
+    ResponseEntity<?> getNameOfUserOrDialog(
+            @PathVariable String auth_token,
+            @PathVariable String dialog_id
+    ) {
+        User user = null;
+        try {
+            user = getUserFromDataBase(auth_token);
+        } catch (IllegalArgumentException e) {
+
+            new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(new Dialog_IdResponse(user.getDisplayName()), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> setNameOfUser(
             @PathVariable String auth_token,
             @RequestBody JSONInputNewName newNameOfUser
@@ -41,6 +54,7 @@ public class SetNameController extends BaseController {
         user.setDisplayName(newNameOfUser.getNew_name());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @RequestMapping("/{dialog_id}")
     ResponseEntity<?> setNameOfDialog(

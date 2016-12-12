@@ -124,4 +124,8 @@ public class Dialog implements Serializable {
     }
 
     private static final Random rnd = new Random();
+
+    public String getOwner() {
+        return owner;
+    }
 }

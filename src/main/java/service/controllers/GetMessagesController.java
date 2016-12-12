@@ -112,13 +112,13 @@ public class GetMessagesController extends BaseController {
     ) {
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
-            log.info("invalid token");
+            log.error("invalid token");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
         User user = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, user)) {
-            log.info("token without username");
+            log.error("token without username");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 

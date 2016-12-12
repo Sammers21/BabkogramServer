@@ -43,14 +43,14 @@ public class LogoutAllTokensController extends BaseController {
 
         Token token = tokenRepository.findByToken(auth_token);
         if (token == null) {
-            log.info("Invalid auth_token");
+            log.error("Invalid auth_token");
 
             return new ResponseEntity<>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
         }
 
         User user = userRepository.findByUsername(token.getUsername());
         if (user == null) {
-            log.info("auth_token without username has removed");
+            log.error("auth_token without username has removed");
             tokenRepository.delete(token);
             return new ResponseEntity<>(new ErrorResponseObject("Invalid auth_token"), HttpStatus.FORBIDDEN);
         } else {

@@ -36,7 +36,7 @@ public class RegisterController extends BaseController {
             log.info("Username " + input.getUsername() + " been register");
             return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
-            log.info("Username " + input.getUsername() + " already taken");
+            log.error("Username " + input.getUsername() + " already taken");
             return new ResponseEntity<>(new ErrorResponseObject("Username already taken"), HttpStatus.FORBIDDEN);
         }
     }

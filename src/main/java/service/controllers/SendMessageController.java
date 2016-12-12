@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import service.entity.Dialog;
 import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
@@ -41,17 +42,36 @@ public class SendMessageController extends BaseController {
             @RequestBody JSONInputRequestMessage jsonInputRequestMessage
     ) {
         Token token = tokenRepository.findByToken(auth_token);
-        if (checkToken(auth_token, token))
+        if (checkToken(auth_token, token)) {
+            log.error("invalid token");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
-
+        }
         User sender = userRepository.findByUsername(token.getUsername());
-        if (checkUser(tokenRepository, auth_token, token, sender))
+        if (checkUser(tokenRepository, auth_token, token, sender)) {
+            log.error("Destination user does not exist");
             return new ResponseEntity<>(new ErrorResponseObject("Destination user does not exist"), HttpStatus.FORBIDDEN);
-
+        }
+        TimeStampResponse tsr = new TimeStampResponse(Instant.now().getEpochSecond() + "");
         if (dialog_id.charAt(0) == '+') {
             log.debug("deal with dialog");
-            //TODO
-            //DIALOG INIT
+            Dialog dialogFromDataBase;
+            try {
+                dialogFromDataBase = getDialogFromDataBase(auth_token, dialog_id);
+            } catch (IllegalArgumentException e) {
+                log.error(e.toString());
+                return new ResponseEntity<>(tsr, HttpStatus.FORBIDDEN);
+            }
+            Message message = new Message(
+                    Instant.now().getEpochSecond(),
+                    genereteGuid(messageRepository),
+                    jsonInputRequestMessage.getType(),
+                    jsonInputRequestMessage.getContent(),
+                    sender.getUsername(),
+                    dialogFromDataBase.getDialogId()
+            );
+            messageRepository.save(message);
+            sendMesaageToDialogMembers(message, dialogFromDataBase);
+
         } else {
             log.debug("deal with user");
             User receiver = userRepository.findByUsername(dialog_id);
@@ -61,7 +81,6 @@ public class SendMessageController extends BaseController {
 
         }
 
-        TimeStampResponse tsr = new TimeStampResponse(Instant.now().getEpochSecond() + "");
         return new ResponseEntity<>(tsr, HttpStatus.OK);
     }
 
@@ -125,22 +144,6 @@ public class SendMessageController extends BaseController {
         return false;
     }
 
-    /**
-     * generate UUID
-     *
-     * @param messageRepository repo in which we need to insert new user
-     * @return UUID
-     */
-    public static String genereteGuid(MessageRepository messageRepository) {
-        UUID randomUUID;
-
-        do {
-            randomUUID = UUID.randomUUID();
-        } while (messageRepository.findByGuid(randomUUID.toString()) != null);
-
-        return randomUUID.toString();
-
-    }
 
     @Autowired
     public SendMessageController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {

@@ -84,13 +84,13 @@ public class GetContactsController extends BaseController {
             String auth_token, int offset) {
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
-            log.info("invalid token");
+            log.error("invalid token");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
         User current = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, current)) {
-            log.info("token without username");
+            log.error("token without username");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 

@@ -37,7 +37,7 @@ public class LoginController extends BaseController{
         User byUsername = userRepository.findByUsername(input.getUsername());
 
         if (byUsername == null) {
-            log.info(" login fail with " + input.getUsername());
+            log.error(" login fail with " + input.getUsername());
             return new ResponseEntity<>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         } else if (byUsername.getPassword().equals(input.getPassword())) {
             Token token = Token.generate(tokenRepository, byUsername.getUsername());
@@ -45,7 +45,7 @@ public class LoginController extends BaseController{
             log.info(input.getUsername() + " get token " + token.getToken());
             return new ResponseEntity<>(token.getJSONObject(), HttpStatus.OK);
         } else {
-            log.info(" login fail with " + input.getUsername() + " and invalid password");
+            log.error(" login fail with " + input.getUsername() + " and invalid password");
             return new ResponseEntity<>(new ErrorResponseObject("Invalid username or password"), HttpStatus.FORBIDDEN);
         }
 

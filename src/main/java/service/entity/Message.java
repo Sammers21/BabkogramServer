@@ -13,8 +13,7 @@ import java.util.Set;
 import static service.controllers.SendMessageController.genereteGuid;
 
 @Entity
-public class Message implements Comparable, Serializable
-{
+public class Message implements Comparable, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,6 +24,7 @@ public class Message implements Comparable, Serializable
 
     private String type;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public long getTimestamp() {
@@ -40,7 +40,6 @@ public class Message implements Comparable, Serializable
 
     @JsonIgnore
     private String toUsername;
-
 
 
     @Override

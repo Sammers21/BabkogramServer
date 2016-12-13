@@ -75,8 +75,10 @@ public class SendMessageController extends BaseController {
         } else {
             log.debug("deal with user");
             User receiver = userRepository.findByUsername(dialog_id);
-            if (checkAndSend(jsonInputRequestMessage, sender, receiver))
+            if (checkAndSend(jsonInputRequestMessage, sender, receiver)) {
+                log.error("no such receiver");
                 return new ResponseEntity<>(new ErrorResponseObject("no such receiver"), HttpStatus.FORBIDDEN);
+            }
 
 
         }

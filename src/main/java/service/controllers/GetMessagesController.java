@@ -148,6 +148,7 @@ public class GetMessagesController extends BaseController {
 
         messages.addAll(FromTo);
 
+        //unique objects
         Set<Message> setOf=new HashSet<>(messages);
         ArrayList<Message> toFrom= new ArrayList<>();
         toFrom.addAll(setOf);

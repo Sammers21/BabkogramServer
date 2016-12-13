@@ -17,8 +17,13 @@ public class Application {
     private static final Logger log = Logger.getLogger(Application.class);
 
     public static void main(String[] args) {
+
         log.info("SPRING SERVER NOW WORKING");
-        SpringApplication.run(Application.class, args);
+        try {
+            SpringApplication.run(Application.class, args);
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
     }
 
 

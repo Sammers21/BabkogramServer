@@ -18,8 +18,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static service.controllers.SendMessageController.checkToken;
@@ -144,10 +143,14 @@ public class GetMessagesController extends BaseController {
         List<Message> messageList = response.getMessages();
 
         //get all messages
-        List<Message> toFrom = messageRepository.findByToUsernameAndSender(toUser.getUsername(), dialog_id);
+        List<Message> messages = messageRepository.findByToUsernameAndSender(toUser.getUsername(), dialog_id);
         List<Message> FromTo = messageRepository.findByToUsernameAndSender(dialog_id, toUser.getUsername());
 
-        toFrom.addAll(FromTo);
+        messages.addAll(FromTo);
+
+        Set<Message> setOf=new HashSet<>(messages);
+        ArrayList<Message> toFrom= new ArrayList<>();
+        messages.addAll(setOf);
 
         log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
 

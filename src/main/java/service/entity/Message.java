@@ -134,6 +134,35 @@ public class Message implements Comparable, Serializable
         return type;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Message)) return false;
+
+        Message message = (Message) o;
+
+        if (getId() != message.getId()) return false;
+        if (getTimestamp() != message.getTimestamp()) return false;
+        if (getGuid() != null ? !getGuid().equals(message.getGuid()) : message.getGuid() != null) return false;
+        if (getType() != null ? !getType().equals(message.getType()) : message.getType() != null) return false;
+        if (getContent() != null ? !getContent().equals(message.getContent()) : message.getContent() != null)
+            return false;
+        if (getSender() != null ? !getSender().equals(message.getSender()) : message.getSender() != null) return false;
+        return getToUsername() != null ? getToUsername().equals(message.getToUsername()) : message.getToUsername() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getGuid() != null ? getGuid().hashCode() : 0);
+        result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+        result = 31 * result + (getContent() != null ? getContent().hashCode() : 0);
+        result = 31 * result + (getSender() != null ? getSender().hashCode() : 0);
+        result = 31 * result + (getToUsername() != null ? getToUsername().hashCode() : 0);
+        result = 31 * result + (int) (getTimestamp() ^ (getTimestamp() >>> 32));
+        return result;
+    }
+
     public Message() {
 
     }

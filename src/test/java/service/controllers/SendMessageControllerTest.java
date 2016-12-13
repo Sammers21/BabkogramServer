@@ -46,7 +46,6 @@ public class SendMessageControllerTest {
     private MessageRepository messageRepository;
 
 
-
     @Autowired
     private MockMvc mvc;
 
@@ -74,37 +73,37 @@ public class SendMessageControllerTest {
 
     @Test
     public void basicMessageSend() throws Exception {
-
-
         mvc.perform(post("/bestToken/messages/send/ilia")
                 .content(this.json(new JSONInputRequestMessage("text", "hello ilia")))
                 .contentType(contentType))
                 .andExpect(status().isOk());
-
         assertTrue(messageRepository.findByContent("hello ilia").size() == 1);
-
-
     }
+
     @Test
     public void notFoudTest() throws Exception {
-
-
         mvc.perform(get("/bestToken/messages/send/ilia/somemethod"))
                 .andExpect(status().isNotFound());
-
-
         assertTrue(messageRepository.findByContent("hello ilia").size() == 1);
+    }
 
-
+    @Test
+    public void longMessageTest() throws Exception {
+        StringBuilder bigText = new StringBuilder("");
+        for (int i = 0; i < 1000000; i++) {
+            bigText.append("veryVeryBigTExt");
+        }
+        mvc.perform(post("/bestToken/messages/send/ilia")
+                .content(this.json(new JSONInputRequestMessage("text", bigText.toString())))
+                .contentType(contentType))
+                .andExpect(status().isOk());
     }
 
 
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
-
         this.mappingJackson2HttpMessageConverter = Arrays.stream(converters).filter(
                 hmc -> hmc instanceof MappingJackson2HttpMessageConverter).findAny().get();
-
         Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }

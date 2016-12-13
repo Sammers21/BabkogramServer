@@ -17,7 +17,10 @@ public class Dialog implements Serializable {
     private long id;
     private String dialogId;
     private String dialogName;
+
     private String owner;
+
+    @Column(columnDefinition = "TEXT")
     private String userList = "";
 
     public static Dialog generate(DialogRepository dialogRepository, User owner) {

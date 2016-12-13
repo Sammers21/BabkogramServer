@@ -150,7 +150,7 @@ public class GetMessagesController extends BaseController {
 
         Set<Message> setOf=new HashSet<>(messages);
         ArrayList<Message> toFrom= new ArrayList<>();
-        messages.addAll(setOf);
+        toFrom.addAll(setOf);
 
         log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
 

@@ -64,7 +64,6 @@ public class SendMessageControllerTest {
         userRepository.save(user2);
         tokenRepository.save(token);
     }
-
     private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),

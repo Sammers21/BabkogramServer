@@ -16,4 +16,7 @@ public class JSONInputNewName {
 
         this.new_name = new_name;
     }
+
+    public JSONInputNewName() {
+    }
 }

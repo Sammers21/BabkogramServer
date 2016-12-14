@@ -9,11 +9,21 @@ import service.repository.UserRepository;
 
 public class BaseControllerTest {
 
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
-    private TokenRepository tokenRepository;
+    public BaseControllerTest() {
+    }
 
-    private DialogRepository dialogRepository;
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository) {
+
+        this.mockMvc = mockMvc;
+        this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
+        this.dialogRepository = dialogRepository;
+    }
+
+    protected TokenRepository tokenRepository;
+    protected DialogRepository dialogRepository;
 }

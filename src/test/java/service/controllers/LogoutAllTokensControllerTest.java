@@ -69,13 +69,9 @@ public class LogoutAllTokensControllerTest {
 
     @Test
     public void succesfullLogout() throws Exception {
-
-
         mvc.perform(post("/bestToken/logoutall"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
-
-
     }
 
     @Test

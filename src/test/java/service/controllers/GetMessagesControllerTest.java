@@ -12,6 +12,7 @@ import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
 import service.objects.JSONInputRequestMessage;
+import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
@@ -25,17 +26,11 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class GetMessagesControllerTest {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenRepository tokenRepository;
-    @Autowired
-    private MessageRepository messageRepository;
-    @Autowired
-    private MockMvc mockMvc;
-
-
+public class GetMessagesControllerTest extends BaseControllerForAllTests {
+     @Autowired
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {
+        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository, messageRepository);
+    }
 
     @Test
     public void getCustomMessageAfterSomeTime() throws Exception {

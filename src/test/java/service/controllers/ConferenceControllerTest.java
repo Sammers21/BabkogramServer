@@ -26,8 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//TODO
-//TESTS
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -102,7 +100,6 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
 
     @Test
     public void user_list() throws Exception {
-        long epochSecond = Instant.now().getEpochSecond();
         mockMvc.perform(get("/BATTOKEN4/conferences/create"))
                 .andExpect(status().isOk());
 
@@ -122,7 +119,7 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
                 .andExpect(jsonPath("$.originator", is("BATYA4")))
                 .andExpect(jsonPath("$.users[0].user_id", is("BATYA")))
                 .andDo(print());
-    }
+            }
 
 
     @Test

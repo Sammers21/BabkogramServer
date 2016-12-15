@@ -140,6 +140,8 @@ public class GetMessagesController extends BaseController {
         MessageResponse response = new MessageResponse();
 
 
+        //TODO DOALOGS
+
         List<Message> messageList = response.getMessages();
 
         //get all messages

@@ -3,7 +3,6 @@ package service.controllers;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import service.entity.User;
 import service.objects.RegisterUserObject;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
+import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import java.io.IOException;
@@ -31,15 +33,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LoginControllerTest {
+public class LoginControllerTest extends  BaseControllerForAllTests{
 
     private static final Logger log = Logger.getLogger(LoginControllerTest.class.getName());
-
     @Autowired
-    private UserRepository userRepository;
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {
+        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository, messageRepository);
+    }
 
-    @Autowired
-    private MockMvc mvc;
+
+
 
     private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -54,7 +57,7 @@ public class LoginControllerTest {
 
         userRepository.save(new User("someusername22", "somepassword"));
 
-        mvc.perform(post("/login")
+        mockMvc.perform(post("/login")
                 .content(this.json(new RegisterUserObject("someusername22", "invalidpassword")))
                 .contentType(contentType))
                 .andExpect(status().isForbidden())
@@ -68,7 +71,7 @@ public class LoginControllerTest {
 
         userRepository.save(new User("someusername27", "somepassword"));
 
-        mvc.perform(post("/login")
+        mockMvc.perform(post("/login")
                 .content(this.json(new RegisterUserObject("someusername27", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isOk())

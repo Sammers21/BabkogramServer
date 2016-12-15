@@ -2,7 +2,6 @@ package service.controllers;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import service.entity.Token;
-import service.entity.User;
+import service.entity.Dialog;
 import service.objects.JSONInputRequestMessage;
+import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
@@ -24,31 +23,27 @@ import service.repository.UserRepository;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("ALL")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SendMessageControllerTest {
+public class SendMessageControllerTest extends BaseControllerForAllTests {
     private static final Logger log = Logger.getLogger(LogoutAllTokensController.class.getName());
 
-
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TokenRepository tokenRepository;
-    @Autowired
-    private MessageRepository messageRepository;
-
-
-    @Autowired
-    private MockMvc mvc;
-
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {
+        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository, messageRepository);
+    }
 
     private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
@@ -58,7 +53,7 @@ public class SendMessageControllerTest {
 
     @Test
     public void basicMessageSend() throws Exception {
-        mvc.perform(post("/bestToken20/messages/send/ilia2")
+        mockMvc.perform(post("/bestToken20/messages/send/ilia2")
                 .content(this.json(new JSONInputRequestMessage("text", "hello ilia2")))
                 .contentType(contentType))
                 .andExpect(status().isOk());
@@ -67,7 +62,7 @@ public class SendMessageControllerTest {
 
     @Test
     public void notFoudTest() throws Exception {
-        mvc.perform(get("/bestToken2/messages/send/ilia/somemethod"))
+        mockMvc.perform(get("/bestToken2/messages/send/ilia/somemethod"))
                 .andExpect(status().isNotFound());
     }
 
@@ -77,12 +72,40 @@ public class SendMessageControllerTest {
         for (int i = 0; i < 10000; i++) {
             bigText.append("veryVeryBigTExt");
         }
-        mvc.perform(post("/bestToken20/messages/send/ilia2")
+        mockMvc.perform(post("/bestToken20/messages/send/ilia2")
                 .content(this.json(new JSONInputRequestMessage("text", bigText.toString())))
                 .contentType(contentType))
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void tsetDialogSendingMessage() throws Exception {
+        mockMvc.perform(get("/BATTOKEN5/conferences/create"))
+                .andExpect(status().isOk());
+
+        assertTrue(dialogRepository.findByOwner("BATYA5").size() == 1);
+        List<Dialog> batyaConfs = dialogRepository.findByOwner("BATYA5");
+
+        mockMvc.perform(get("/BATTOKEN5/conferences/" + batyaConfs
+                .get(0).getDialogId() + "/invite/" + "BATYA"))
+                .andExpect(status().isOk());
+
+        Thread.sleep(2000);
+        batyaConfs = dialogRepository.findByOwner("BATYA5");
+        assertTrue(batyaConfs.get(0).getUserNameList().contains("BATYA"));
+
+        mockMvc.perform(post("/BATTOKEN5/messages/send/" + batyaConfs
+                .get(0).getDialogId())
+                .content(this.json(new JSONInputRequestMessage("text","hello at all")))
+                .contentType(contentType))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/BATTOKEN/messages/"+ batyaConfs.get(0).getDialogId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages[0].content",is("dialog was created by BATYA5")))
+                .andExpect(jsonPath("$.messages[1].content",is("user BATYA was invited")))
+                .andExpect(jsonPath("$.messages[2].content",is("hello at all")));
+
+    }
 
 
     @Autowired

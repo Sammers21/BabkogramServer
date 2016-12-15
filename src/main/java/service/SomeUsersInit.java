@@ -36,7 +36,7 @@ public class SomeUsersInit {
     }
 
     @PostConstruct
-    public void kek() throws InterruptedException {
+    public void initTestSet() throws InterruptedException {
         User user = new User("pavel", "bestprogrammer");
         User user3 = new User("danil", "123");
         User user4 = new User("BigBoss", "123");
@@ -112,13 +112,17 @@ public class SomeUsersInit {
         User bat2 = new User("BATYA2", "BATYATHEBESTMESSA");
         User bat3 = new User("BATYA3", "BATYATHEBESTMESSA");
         User bat4 = new User("BATYA4", "BATYATHEBESTMESSA");
+        User bat5 = new User("BATYA5", "BATYATHEBESTMESSA");
         Token tokenBat = new Token("BATTOKEN", "BATYA");
         Token tokenBat2 = new Token("BATTOKEN2", "BATYA2");
         Token tokenBat3 = new Token("BATTOKEN3", "BATYA3");
         Token tokenBat4 = new Token("BATTOKEN4", "BATYA4");
+        Token tokenBat5 = new Token("BATTOKEN5", "BATYA5");
         tokenRepository.save(tokenBat);
         tokenRepository.save(tokenBat2);
         tokenRepository.save(tokenBat4);
+        tokenRepository.save(tokenBat5);
+        userRepository.save(bat5);
         userRepository.save(bat2);
         userRepository.save(bat);
         userRepository.save(bat4);

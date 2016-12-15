@@ -38,4 +38,5 @@ public class BaseControllerForAllTests {
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8")
     );
+
 }

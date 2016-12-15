@@ -89,7 +89,7 @@ public class BaseController {
                                 genereteGuid(messageRepository),
                                 message.getType(),
                                 message.getContent(),
-                                dialog.getDialogId(),
+                                message.getSender(),
                                 s
                         );
                         messageRepository.save(messageToSend);

@@ -2,7 +2,6 @@ package service.controllers;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,8 @@ import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import service.entity.Token;
-import service.entity.User;
+import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
@@ -36,23 +36,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LogoutControllerTest {
+public class LogoutControllerTest extends BaseControllerForAllTests {
 
     private static final Logger log = Logger.getLogger(LogoutControllerTest.class.getName());
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private TokenRepository tokenRepository;
-
-    @Autowired
-    private MockMvc mvc;
 
 
     @Test
     public void succesfullLogout() throws Exception {
-        mvc.perform(post("/bestToken/logout"))
+        mockMvc.perform(post("/bestToken/logout"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
         Token token = new Token("bestToken", "pavel");
@@ -60,9 +51,14 @@ public class LogoutControllerTest {
 
     }
 
+    @Autowired
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {
+        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository, messageRepository);
+    }
+
     @Test
     public void unSuccesfullLogout() throws Exception {
-        mvc.perform(post("/worstToken/logout"))
+        mockMvc.perform(post("/worstToken/logout"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error", is("Invalid auth_token")));
     }

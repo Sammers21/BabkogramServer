@@ -47,19 +47,15 @@ public class LoginControllerTest {
             Charset.forName("utf8")
     );
 
-    @Before
-    public void setUp() {
-        userRepository.deleteAll();
-    }
 
 
     @Test
     public void invalidPassword() throws Exception {
 
-        userRepository.save(new User("someusername", "somepassword"));
+        userRepository.save(new User("someusername22", "somepassword"));
 
         mvc.perform(post("/login")
-                .content(this.json(new RegisterUserObject("someusername", "invalidpassword")))
+                .content(this.json(new RegisterUserObject("someusername22", "invalidpassword")))
                 .contentType(contentType))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error").isString());
@@ -70,10 +66,10 @@ public class LoginControllerTest {
     @Test
     public void validPassword() throws Exception {
 
-        userRepository.save(new User("someusername", "somepassword"));
+        userRepository.save(new User("someusername27", "somepassword"));
 
         mvc.perform(post("/login")
-                .content(this.json(new RegisterUserObject("someusername", "somepassword")))
+                .content(this.json(new RegisterUserObject("someusername27", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isString());

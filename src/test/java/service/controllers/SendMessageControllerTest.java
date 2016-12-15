@@ -49,21 +49,7 @@ public class SendMessageControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Before
-    public void clean() {
-        userRepository.deleteAll();
-        tokenRepository.deleteAll();
 
-        User user = new User("pavel", "bestprogrammer");
-        User user2 = new User("ilia", "bestprogrammer");
-        Token token = new Token("bestToken", "pavel");
-        Token token1 = new Token("badToken", "ilia");
-
-
-        userRepository.save(user);
-        userRepository.save(user2);
-        tokenRepository.save(token);
-    }
     private MediaType contentType = new MediaType(
             MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
@@ -72,31 +58,31 @@ public class SendMessageControllerTest {
 
     @Test
     public void basicMessageSend() throws Exception {
-        mvc.perform(post("/bestToken/messages/send/ilia")
-                .content(this.json(new JSONInputRequestMessage("text", "hello ilia")))
+        mvc.perform(post("/bestToken20/messages/send/ilia2")
+                .content(this.json(new JSONInputRequestMessage("text", "hello ilia2")))
                 .contentType(contentType))
                 .andExpect(status().isOk());
-        assertTrue(messageRepository.findByContent("hello ilia").size() == 1);
+        assertTrue(messageRepository.findByContent("hello ilia2").size() == 1);
     }
 
     @Test
     public void notFoudTest() throws Exception {
-        mvc.perform(get("/bestToken/messages/send/ilia/somemethod"))
+        mvc.perform(get("/bestToken2/messages/send/ilia/somemethod"))
                 .andExpect(status().isNotFound());
-        assertTrue(messageRepository.findByContent("hello ilia").size() == 1);
     }
 
     @Test
     public void longMessageTest() throws Exception {
         StringBuilder bigText = new StringBuilder("");
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000; i++) {
             bigText.append("veryVeryBigTExt");
         }
-        mvc.perform(post("/bestToken/messages/send/ilia")
+        mvc.perform(post("/bestToken20/messages/send/ilia2")
                 .content(this.json(new JSONInputRequestMessage("text", bigText.toString())))
                 .contentType(contentType))
                 .andExpect(status().isOk());
     }
+
 
 
     @Autowired

@@ -43,35 +43,24 @@ public class LogoutAllTokensControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Before
-    public void clean() {
-
-
-        userRepository.deleteAll();
-        tokenRepository.deleteAll();
-
-        User user = new User("pavel", "bestprogrammer");
-        Token token = new Token("bestToken", "pavel");
-        Token token2 = new Token("bestToken2", "pavel");
-        Token token3 = new Token("bestToken3", "pavel");
-        Token token4 = new Token("bestToken4", "pavel");
-
-        userRepository.save(user);
-        tokenRepository.save(token);
-
-        tokenRepository.save(token2);
-        tokenRepository.save(token3);
-        tokenRepository.save(token4);
-
-
-    }
 
 
     @Test
     public void succesfullLogout() throws Exception {
+
         mvc.perform(post("/bestToken/logoutall"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
+        Token token = new Token("bestToken", "pavel");
+        Token token2 = new Token("bestToken2", "pavel");
+        Token token3 = new Token("bestToken3", "pavel");
+        Token token4 = new Token("bestToken4", "pavel");
+        Token token5 = new Token("kek1", "pavel");
+        tokenRepository.save(token);
+        tokenRepository.save(token2);
+        tokenRepository.save(token3);
+        tokenRepository.save(token4);
+        tokenRepository.save(token5);
     }
 
     @Test

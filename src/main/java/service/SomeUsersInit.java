@@ -36,8 +36,97 @@ public class SomeUsersInit {
     }
 
     @PostConstruct
+    public void kek() throws InterruptedException {
+        User user = new User("pavel", "bestprogrammer");
+        User user3 = new User("danil", "123");
+        User user4 = new User("BigBoss", "123");
+        User user2 = new User("ilia", "bestprogrammer");
+        User user5 = new User("ilia2", "bestprogrammer");
+        User user6 = new User("pavel2", "bestprogrammer");
+        userRepository.save(user6);
+        userRepository.save(user2);
+        userRepository.save(user5);
+        userRepository.save(user3);
+        userRepository.save(user4);
+        userRepository.save(user);
+        Token token9 = new Token("bestToken20", "pavel2");
+        Token token = new Token("bestToken", "pavel");
+        Token token1 = new Token("badToken", "ilia");
+        Token token2 = new Token("bestToken2", "pavel");
+        Token token3 = new Token("bestToken3", "pavel");
+        Token token4 = new Token("bestToken4", "pavel");
+        Token token5 = new Token("kek1", "pavel");
+        Token token6 = new Token("kek2", "ilia");
+        Token token7 = new Token("kek3", "danil");
+        Token token8 = new Token("kek4", "BigBoss");
+        tokenRepository.save(token);
+        tokenRepository.save(token9);
+        tokenRepository.save(token1);
+        tokenRepository.save(token2);
+        tokenRepository.save(token3);
+        tokenRepository.save(token4);
+        tokenRepository.save(token5);
+        tokenRepository.save(token6);
+        tokenRepository.save(token7);
+        tokenRepository.save(token8);
+        Message helloFromDanil = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
+                "danil",
+                "pavel",
+                messageRepository);
+        Thread.sleep(1000);
+        Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
+                "ilia",
+                "pavel",
+                messageRepository);
+        Thread.sleep(2000);
+        Message helloFromIlia2 = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloAgain"),
+                "ilia",
+                "pavel",
+                messageRepository);
+        messageRepository.save(helloFromDanil);
+        messageRepository.save(helloFromIlia);
+        messageRepository.save(helloFromIlia2);
+
+
+        Message helloFromPavel = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
+                "pavel",
+                "ilia",
+                messageRepository);
+        Thread.sleep(1000);
+        messageRepository.save(helloFromDanil);
+        messageRepository.save(helloFromIlia);
+        messageRepository.save(helloFromPavel);
+        Message helloFROMBOSS = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
+                "BigBoss",
+                "danil",
+                messageRepository);
+        messageRepository.save(helloFROMBOSS);
+
+    }
+
+    @PostConstruct
     public void initNewUsers() {
 
+
+        User bat = new User("BATYA", "BATYATHEBESTMESSA");
+        User bat2 = new User("BATYA2", "BATYATHEBESTMESSA");
+        User bat3 = new User("BATYA3", "BATYATHEBESTMESSA");
+        User bat4 = new User("BATYA4", "BATYATHEBESTMESSA");
+        Token tokenBat = new Token("BATTOKEN", "BATYA");
+        Token tokenBat2 = new Token("BATTOKEN2", "BATYA2");
+        Token tokenBat3 = new Token("BATTOKEN3", "BATYA3");
+        Token tokenBat4 = new Token("BATTOKEN4", "BATYA4");
+        tokenRepository.save(tokenBat);
+        tokenRepository.save(tokenBat2);
+        tokenRepository.save(tokenBat4);
+        userRepository.save(bat2);
+        userRepository.save(bat);
+        userRepository.save(bat4);
+        tokenRepository.save(tokenBat3);
+        userRepository.save(bat3);
+
+        User user1 = new User("pavell", "123");
+        Token token2 = new Token("kek23", "pavell");
         User d = new User("DanilKashin", "1234567890");
         User i = new User("IliaGulkov", "1234567890");
         Message helloFromDanil = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
@@ -46,9 +135,14 @@ public class SomeUsersInit {
                 messageRepository);
         Dialog dialog = Dialog.generate(dialogRepository, i);
         Token token = new Token("DanilsTOken", "DanilKashin");
+
+
         tokenRepository.save(token);
         userRepository.save(d);
+
         userRepository.save(i);
         messageRepository.save(helloFromDanil);
+        tokenRepository.save(token2);
+        userRepository.save(user1);
     }
 }

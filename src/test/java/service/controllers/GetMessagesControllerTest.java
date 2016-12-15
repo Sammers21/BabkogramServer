@@ -35,42 +35,7 @@ public class GetMessagesControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
-        tokenRepository.deleteAll();
-        userRepository.deleteAll();
-        messageRepository.deleteAll();
-        User user1 = new User("pavel", "123");
-        User user2 = new User("ilia", "123");
-        User user3 = new User("danil", "123");
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        Token token = new Token("kek1", "pavel");
-        Token token2 = new Token("kek2", "ilia");
-        Token token3 = new Token("kek3", "danil");
-        tokenRepository.save(token);
-        tokenRepository.save(token2);
-        tokenRepository.save(token3);
-        Message helloFromDanil = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
-                "danil",
-                "pavel",
-                messageRepository);
-        Thread.sleep(1000);
-        Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
-                "ilia",
-                "pavel",
-                messageRepository);
-        Thread.sleep(1000);
-        Message helloFromPavel = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
-                "pavel",
-                "ilia",
-                messageRepository);
-        Thread.sleep(1000);
-        messageRepository.save(helloFromDanil);
-        messageRepository.save(helloFromIlia);
-        messageRepository.save(helloFromPavel);
-    }
+
 
     @Test
     public void getCustomMessageAfterSomeTime() throws Exception {

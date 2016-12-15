@@ -39,6 +39,7 @@ public class Dialog implements Serializable {
         dialog.setDialogId("+" + stringBuilder.toString());
         dialog.setOwner(owner.getUsername());
         dialog.setDialogName(dialog.getDialogId());
+        dialog.addUser(owner.getUsername());
         dialogRepository.save(dialog);
         return dialog;
     }

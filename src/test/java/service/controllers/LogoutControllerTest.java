@@ -49,35 +49,19 @@ public class LogoutControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Before
-    public void clean() {
-        userRepository.deleteAll();
-        tokenRepository.deleteAll();
-
-        User user = new User("pavel", "bestprogrammer");
-        Token token = new Token("bestToken", "pavel");
-
-        userRepository.save(user);
-        tokenRepository.save(token);
-
-    }
-
 
     @Test
     public void succesfullLogout() throws Exception {
-
-
         mvc.perform(post("/bestToken/logout"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message", is("Logged out")));
-
+        Token token = new Token("bestToken", "pavel");
+        tokenRepository.save(token);
 
     }
 
     @Test
     public void unSuccesfullLogout() throws Exception {
-
-
         mvc.perform(post("/worstToken/logout"))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error", is("Invalid auth_token")));

@@ -59,15 +59,11 @@ public class RegisterControllerTest {
         Assert.assertNotNull("the JSON message converter must not be null",
                 this.mappingJackson2HttpMessageConverter);
     }
-    @Before
-    public void setUp() {
-        userRepository.deleteAll();
-    }
+
 
 
     @Test
     public void simpleRegisterTest() throws Exception {
-        userRepository.deleteAll();
         mvc.perform(post("/register")
                 .content(this.json(new RegisterUserObject("someusername", "somepassword")))
                 .contentType(contentType))
@@ -77,15 +73,14 @@ public class RegisterControllerTest {
 
     @Test
     public void invalidUsertTest() throws Exception {
-        userRepository.deleteAll();
-        userRepository.save(new User("someusername", "somepassword"));
-        User user = userRepository.findByUsername("someusername");
+        userRepository.save(new User("someusernam2e", "somepassword"));
+        User user = userRepository.findByUsername("someusernam2e");
         log.debug("usrn " + user.getUsername());
         log.debug("psw " + user.getPassword());
 
 
         mvc.perform(post("/register")
-                .content(this.json(new RegisterUserObject("someusername", "somepassword")))
+                .content(this.json(new RegisterUserObject("someusernam2e", "somepassword")))
                 .contentType(contentType))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.error").isString());

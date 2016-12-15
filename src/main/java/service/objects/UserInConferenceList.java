@@ -22,6 +22,14 @@ public class UserInConferenceList {
         this.join_time = join_time;
     }
 
+    public long getJoin_time() {
+        return join_time;
+    }
+
+    public void setJoin_time(long join_time) {
+        this.join_time = join_time;
+    }
+
     private long join_time;
 
 }

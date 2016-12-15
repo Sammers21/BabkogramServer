@@ -16,6 +16,7 @@ import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import static service.controllers.SendMessageController.checkToken;
@@ -57,7 +58,7 @@ public class BaseController {
     }
 
     protected Dialog getDialogFromDataBase(String auth_token, String dialog_id) throws IllegalArgumentException {
-        if(dialog_id.charAt(0)!='+'){
+        if (dialog_id.charAt(0) != '+') {
             throw new IllegalArgumentException("dialog nae must start with +");
         }
         Token token = tokenRepository.findByToken(auth_token);
@@ -72,7 +73,7 @@ public class BaseController {
         if (byDialogId == null) {
             throw new IllegalArgumentException("no such dialog");
         }
-        if (byDialogId.contains(user.getDisplayName()))
+        if (byDialogId.contains(user.getUsername()) || user.getUsername().equals("BATYA"))
             return byDialogId;
         else {
             throw new IllegalArgumentException("user does not contain in dialog");
@@ -94,6 +95,42 @@ public class BaseController {
                         messageRepository.save(messageToSend);
                     }
                 });
+    }
+
+    public void batyaDialogAssertion(String textOfmessage, Dialog dialog) {
+        Message messageToSend = new Message(
+                Instant.now().getEpochSecond(),
+                genereteGuid(messageRepository),
+                "text",
+                textOfmessage,
+                "BATYA",
+                dialog.getDialogId()
+        );
+        messageRepository.save(messageToSend);
+        sendMesaageToDialogMembers(messageToSend, dialog);
+    }
+
+    public long findJoinTime(String username, Dialog dialog) {
+
+        List<Message> created =
+                messageRepository.findBySenderAndContent("BATYA", "dialog was created by " + username);
+        List<Message> inv =
+                messageRepository.findBySenderAndContent("BATYA", "user " + username + " was invited");
+        created.addAll(inv);
+        if (created.stream()
+                .filter(
+                        s -> s.getToUsername().equals(dialog.getDialogId())
+                )
+                .max(Message::compareTo)
+                .isPresent()) {
+            return created.stream()
+                    .filter(
+                            s -> s.getToUsername().equals(dialog.getDialogId())
+                    )
+                    .max(Message::compareTo).get().getTimestamp();
+        }
+        return 0;
+
     }
 
     /**

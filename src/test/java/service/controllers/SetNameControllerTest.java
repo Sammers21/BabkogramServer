@@ -1,7 +1,6 @@
 package service.controllers;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +12,18 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import service.entity.Dialog;
 import service.entity.User;
 import service.objects.JSONInputNewName;
 
 import service.repository.DialogRepository;
+import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SetNameControllerTest extends BaseControllerTest {
+public class SetNameControllerTest extends BaseControllerForAllTests {
 
     @Test
     public void getNameOfUser() throws Exception {
@@ -81,9 +79,10 @@ public class SetNameControllerTest extends BaseControllerTest {
     }
 
 
+
     @Autowired
-    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository) {
-        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository);
+    public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {
+        super.setup(mockMvc, userRepository, tokenRepository, dialogRepository, messageRepository);
     }
 
     @Autowired

@@ -12,9 +12,9 @@ available methods
     
 
 
-2.1/login
+1/login
 
-2.2/register 
+2/register 
 
 POST request with body for both of login and register
 
@@ -38,29 +38,21 @@ response
        error : "error message"      
     }
 
-2.3/{auth_token}/logout && /{auth_token}/logoutall
+3/{auth_token}/logout && /{auth_token}/logoutall
 
-2.4/{auth_token}/contacts/[offset/{offset}]
+4/{auth_token}/contacts/[offset/{offset}]
 
-2.5/{auth_token}/messages/{dialog_id}/limit/{limit}/skip/{offset}
+5/{auth_token}/messages/{dialog_id}/limit/{limit}/skip/{offset}
 
-2.6/{auth_token}/messages/{dialog_id}/after/{timestamp}
+6/{auth_token}/messages/{dialog_id}/after/{timestamp}
 
-2.7/{auth_token}/messages/send/{dialog_id}
+7/{auth_token}/messages/send/{dialog_id}
+
+8 GET /:auth_token/name/:dialog_id
+
+9 POST /:auth_token/name[/:dialog_id]
 
 
-7./{auth_token}/contacts GET
-
-
-9./{auth_token}/messages/{dialog_id} GET
-
-10./{auth_token}/messages/{dialog_id}/limit/{limit} GET
-
-11./{auth_token}/messages/{dialog_id}/limit/{limit}/skip/{offset}
-
-12./{auth_token}/messages/{dialog_id}/after/{timestamp} GET
-
-13./after/{timestamp}/limit/{limit} GET
 
     
     

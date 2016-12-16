@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import service.entity.Dialog;
 import service.entity.Message;
 import service.entity.Token;
 import service.entity.User;
@@ -121,7 +122,7 @@ public class GetMessagesController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
-        MessageResponse response = getMessageResponse(dialog_id, limit, skip, timestamp, user);
+        MessageResponse response = getMessageResponse(dialog_id, limit, skip, timestamp, user, auth_token);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -136,37 +137,45 @@ public class GetMessagesController extends BaseController {
      * @param toUser    ref to User from which messages
      * @return suitable response
      */
-    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser) {
+    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser, String auth_token) {
         MessageResponse response = new MessageResponse();
 
-
-        //TODO DOALOGS
-
+        List<Message> messageToRetunr = new ArrayList<Message>();
         List<Message> messageList = response.getMessages();
 
-        //get all messages
-        List<Message> messages = messageRepository.findByToUsernameAndSender(toUser.getUsername(), dialog_id);
-        List<Message> FromTo = messageRepository.findByToUsernameAndSender(dialog_id, toUser.getUsername());
+        if (dialog_id.charAt(0) == '+') {
+            Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, dialog_id);
+            long joinTime = findJoinTime(toUser.getUsername(), dialogFromDataBase);
+            List<Message> messagesToDilaog = messageRepository.findByToUsername(dialog_id);
 
-        messages.addAll(FromTo);
+            List<Message> collcted = messagesToDilaog.stream().
+                    filter(s -> s.getTimestamp() > joinTime)
+                    .sorted(Message::compareTo)
+                    .collect(Collectors.toList());
 
-        //unique objects
-        Set<Message> setOf=new HashSet<>(messages);
-        ArrayList<Message> toFrom= new ArrayList<>();
-        toFrom.addAll(setOf);
+            messageToRetunr.addAll(collcted);
+        } else {
+            List<Message> messages = messageRepository.findByToUsernameAndSender(toUser.getUsername(), dialog_id);
+            List<Message> FromTo = messageRepository.findByToUsernameAndSender(dialog_id, toUser.getUsername());
+            messages.addAll(FromTo);
+            //unique objects
+            Set<Message> setOf = new HashSet<>(messages);
+            ArrayList<Message> toFrom = new ArrayList<>();
+            toFrom.addAll(setOf);
 
-        log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
+            log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
 
-        //filter messages
-        List<Message> dialog = toFrom.stream().filter(
-                l ->
-                        (l.getSender().equals(dialog_id) || l.getToUsername().equals(dialog_id))
-                                && l.getTimestamp() > timestamp
-        ).sorted(Message::compareTo).collect(Collectors.toList());
-        Collections.reverse(dialog);
+            //filter messages
+            List<Message> dialog = toFrom.stream().filter(
+                    l ->
+                            (l.getSender().equals(dialog_id) || l.getToUsername().equals(dialog_id))
+                                    && l.getTimestamp() > timestamp
+            ).sorted(Message::compareTo).collect(Collectors.toList());
+            messageToRetunr.addAll(dialog);
+        }
         //fill response object
-        for (int i = skip; i < dialog.size() && i - skip <= limit; i++) {
-            messageList.add(dialog.get(i));
+        for (int i = skip; i < messageToRetunr.size() && i - skip <= limit; i++) {
+            messageList.add(messageToRetunr.get(i));
         }
         Collections.reverse(messageList);
         log.info("dialog between " + toUser.getUsername() +

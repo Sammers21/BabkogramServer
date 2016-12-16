@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import service.entity.*;
 import service.entity.Dialog;
@@ -20,14 +19,11 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 import static service.controllers.SendMessageController.checkToken;
-import static service.controllers.SendMessageController.checkUser;
 
 
 @RestController
@@ -54,7 +50,7 @@ public class ConferenceController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
         }
         Dialog generatedDialog = Dialog.generate(dialogRepository, user);
-        batyaDialogAssertion("dialog was created by " + user.getUsername(), generatedDialog);
+        systemDialogAssertion("created", generatedDialog);
         return new ResponseEntity<>(new ReturnDialogConferenceId(generatedDialog.getDialogName()), HttpStatus.OK);
     }
 
@@ -75,10 +71,8 @@ public class ConferenceController extends BaseController {
                 return new ResponseEntity<>(new ErrorResponseObject("user is not exist"), HttpStatus.FORBIDDEN);
             }
             dialogFromDataBase.addUser(user_id);
-
-            batyaDialogAssertion(
-                    "user " + toInviteUser.getUsername()
-                            + " was invited",
+            systemDialogAssertion(
+                    "invited|" + toInviteUser.getUsername(),
                     dialogFromDataBase);
             dialogRepository.save(dialogFromDataBase);
         } catch (Exception e) {
@@ -98,10 +92,7 @@ public class ConferenceController extends BaseController {
         User userFromDataBase = getUserFromDataBase(auth_token);
         String owner = userFromDataBase.getUsername();
         if (dialogFromDataBase.getOwner().equals(owner)) {
-            batyaDialogAssertion(userFromDataBase.getUsername()
-                    + " kick "
-                    + user_id +
-                    " from dialog", dialogFromDataBase);
+            systemDialogAssertion("kicked|" + userFromDataBase.getUsername(), dialogFromDataBase);
             dialogFromDataBase.deleteUser(user_id);
             dialogRepository.save(dialogFromDataBase);
             log.info("succes kick from conference");
@@ -124,7 +115,7 @@ public class ConferenceController extends BaseController {
             log.error("user can't leave from own conference");
             return new ResponseEntity<>(new ErrorResponseObject("user can't leave from own conference"), HttpStatus.FORBIDDEN);
         } else {
-            batyaDialogAssertion(username + " leave from dialog", dialogFromDataBase);
+            systemDialogAssertion("left|" + userFromDataBase.getUsername(), dialogFromDataBase);
             dialogFromDataBase.deleteUser(username);
             dialogRepository.save(dialogFromDataBase);
             log.info("user " + userFromDataBase.getUsername() + " leave from " + dialogFromDataBase.getDialogId());

@@ -70,7 +70,7 @@ public class SendMessageController extends BaseController {
                     dialogFromDataBase.getDialogId()
             );
             messageRepository.save(message);
-            sendMesaageToDialogMembers(message, dialogFromDataBase);
+           // sendMesaageToDialogMembers(message, dialogFromDataBase);
 
         } else {
             log.debug("deal with user");

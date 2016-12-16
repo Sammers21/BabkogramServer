@@ -97,25 +97,25 @@ public class BaseController {
                 });
     }
 
-    public void batyaDialogAssertion(String textOfmessage, Dialog dialog) {
+    public void systemDialogAssertion(String textOfmessage, Dialog dialog) {
         Message messageToSend = new Message(
                 Instant.now().getEpochSecond(),
                 genereteGuid(messageRepository),
-                "text",
+                "system",
                 textOfmessage,
-                "BATYA",
+                "",
                 dialog.getDialogId()
         );
         messageRepository.save(messageToSend);
-        sendMesaageToDialogMembers(messageToSend, dialog);
+        // sendMesaageToDialogMembers(messageToSend, dialog);
     }
 
     public long findJoinTime(String username, Dialog dialog) {
 
         List<Message> created =
-                messageRepository.findBySenderAndContent("BATYA", "dialog was created by " + username);
+                messageRepository.findBySenderAndContent("", "created" );
         List<Message> inv =
-                messageRepository.findBySenderAndContent("BATYA", "user " + username + " was invited");
+                messageRepository.findBySenderAndContent("", "invited|"+username);
         created.addAll(inv);
         if (created.stream()
                 .filter(

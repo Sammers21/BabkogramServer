@@ -78,29 +78,26 @@ public class SomeUsersInit {
                 "ilia",
                 "pavel",
                 messageRepository);
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         Message helloFromIlia2 = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloAgain"),
                 "ilia",
                 "pavel",
                 messageRepository);
-        messageRepository.save(helloFromDanil);
-        messageRepository.save(helloFromIlia);
-        messageRepository.save(helloFromIlia2);
-
-
         Message helloFromPavel = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "pavel",
                 "ilia",
                 messageRepository);
         Thread.sleep(1000);
-        messageRepository.save(helloFromDanil);
-        messageRepository.save(helloFromIlia);
-        messageRepository.save(helloFromPavel);
         Message helloFROMBOSS = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
                 "BigBoss",
                 "danil",
                 messageRepository);
+
+        messageRepository.save(helloFromIlia2);
         messageRepository.save(helloFROMBOSS);
+        messageRepository.save(helloFromDanil);
+        messageRepository.save(helloFromIlia);
+        messageRepository.save(helloFromPavel);
 
     }
 

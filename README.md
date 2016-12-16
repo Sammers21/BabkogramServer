@@ -52,9 +52,15 @@ response
 
 9 POST /:auth_token/name[/:dialog_id]
 
+10 POST /:auth_token/conferences/create
 
+11 POST /:auth_token/conferences/:conference_id/invite/:user_id
 
-    
+12 POST /:auth_token/conferences/:conference_id/kick/:user_id
+
+13 POST /:auth_token/conferences/:conference_id/leave
+
+14 GET /:auth_token/conferences/:conference_id/user_list
     
 
    

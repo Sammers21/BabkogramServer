@@ -86,25 +86,27 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
         assertTrue(dialogRepository.findByOwner("BATYA5").size() == 1);
         List<Dialog> batyaConfs = dialogRepository.findByOwner("BATYA5");
 
+
+        Thread.sleep(2000);
+
         mockMvc.perform(get("/BATTOKEN5/conferences/" + batyaConfs
                 .get(0).getDialogId() + "/invite/" + "BATYA"))
                 .andExpect(status().isOk());
 
-        Thread.sleep(2000);
         batyaConfs = dialogRepository.findByOwner("BATYA5");
         assertTrue(batyaConfs.get(0).getUserNameList().contains("BATYA"));
 
+        Thread.sleep(2000);
         mockMvc.perform(post("/BATTOKEN5/messages/send/" + batyaConfs
                 .get(0).getDialogId())
-                .content(this.json(new JSONInputRequestMessage("text","hello at all")))
+                .content(this.json(new JSONInputRequestMessage("text", "hello at all")))
                 .contentType(contentType))
                 .andExpect(status().isOk());
+
         mockMvc.perform(get("/BATTOKEN/messages/"+ batyaConfs.get(0).getDialogId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messages[0].content",is("dialog was created by BATYA5")))
-                .andExpect(jsonPath("$.messages[1].content",is("user BATYA was invited")))
-                .andExpect(jsonPath("$.messages[2].content",is("hello at all")));
-
+                .andExpect(jsonPath("$.messages[0].content",is("invited|BATYA")))
+                .andExpect(jsonPath("$.messages[1].content",is("hello at all")));
     }
 
 

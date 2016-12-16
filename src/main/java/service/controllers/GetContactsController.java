@@ -127,7 +127,6 @@ public class GetContactsController extends BaseController {
             }
         }
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
-        Collections.reverse(uniqMessages);
         for (int i = offset; i < uniqMessages.size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {
             Message message = uniqMessages.get(i);
             DialogMessageInResponse d;

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
-public class User implements Serializable {
+public class User implements Storage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -16,6 +16,8 @@ public class User implements Serializable {
     private String username;
 
     private String password;
+
+    private String dialogList;
 
     public String getDisplayName() {
         return displayName;
@@ -25,6 +27,7 @@ public class User implements Serializable {
         this.displayName = displayName;
     }
 
+    @JsonIgnore
     private String displayName;
 
     public long getId() {
@@ -46,6 +49,23 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         setDisplayName(username);
+    }
+
+
+    public boolean contains(String userName) {
+        return dialogList.contains(userName);
+    }
+
+    public void addUser(String dialog) {
+        add(dialogList, dialog);
+    }
+
+    public void deleteUser(String dialog) {
+        delete(dialogList, dialog);
+    }
+
+    public List<String> getUserNameList() {
+        return getList(dialogList);
     }
 
     @Override

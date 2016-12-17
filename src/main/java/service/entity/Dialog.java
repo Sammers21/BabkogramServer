@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-public class Dialog implements Serializable {
+public class Dialog implements Serializable, Storage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore
@@ -49,42 +49,11 @@ public class Dialog implements Serializable {
     }
 
     public void addUser(String userName) {
-        if (userList.equals("")) {
-            userList += userName;
-        } else if (!userList.contains(";")) {
-            if (!userList.equals(userName)) {
-                userList += ";" + userName;
-            }
-        } else {
-            List<String> s2 = Arrays.stream(userList.split(";"))
-                    .filter(s -> s.equals(userName))
-                    .collect(Collectors.toList());
-            if (s2.size() == 0) {
-                userList += ";" + userName;
-            }
-
-        }
+        add(userList, userName);
     }
 
     public void deleteUser(String userName) {
-        if (userList.contains(userName)) {
-            if (!userList.contains(";")) {
-                userList = "";
-            } else {
-                List<String> s2 = Arrays.stream(userList.split(";"))
-                        .filter(s -> !s.equals(userName))
-                        .collect(Collectors.toList());
-                if (s2.size() == 1) {
-                    userList = s2.get(0);
-                } else {
-                    userList = s2.get(0);
-                    for (int i = 1; i < s2.size(); i++) {
-                        userList += ";" + s2.get(i);
-                    }
-                }
-            }
-        }
-
+        delete(userList, userName);
     }
 
     public List<String> getUserNameList() {

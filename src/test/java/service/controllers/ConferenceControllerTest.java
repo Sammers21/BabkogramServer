@@ -38,7 +38,7 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
         mockMvc.perform(get("/BATTOKEN/conferences/create"))
                 .andExpect(status().isOk());
 
-        assertTrue(dialogRepository.findByOwner("BATYA").size() == 1);
+        assertTrue(dialogRepository.findByOwner("BATYA").size() != 0);
         List<Dialog> batyaConfs = dialogRepository.findByOwner("BATYA");
 
         mockMvc.perform(get("/BATTOKEN/conferences/" + batyaConfs
@@ -63,7 +63,7 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
         mockMvc.perform(get("/BATTOKEN2/conferences/create"))
                 .andExpect(status().isOk());
 
-        assertTrue(dialogRepository.findByOwner("BATYA2").size() == 1);
+        assertTrue(dialogRepository.findByOwner("BATYA2").size() != 0);
         List<Dialog> batyaConfs = dialogRepository.findByOwner("BATYA2");
 
         mockMvc.perform(get("/BATTOKEN2/conferences/" + batyaConfs

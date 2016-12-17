@@ -25,3 +25,7 @@ rest-server.iml
 logs/*.log
 target
 logs
+/bin/
+.classpath
+.project
+.settings

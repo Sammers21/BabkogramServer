@@ -106,9 +106,6 @@ public class GetContactsController extends BaseController {
 
         String currentUsername = user.getUsername();
 
-        //get dialogs
-
-
         ContactsResponse contactsResponse = new ContactsResponse();
         ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
 
@@ -129,7 +126,7 @@ public class GetContactsController extends BaseController {
                 .collect(Collectors.toList());
 
         for (Message message : DialoglastMessages) {
-            loginUserMap.put(message.getSender(), message);
+            loginUserMap.put(message.getToUsername(), message);
         }
 
         for (Message message : messages) {
@@ -151,17 +148,15 @@ public class GetContactsController extends BaseController {
 
 
         //sort messages by timestamp
-        List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
+        //List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
+        List<String> strings = loginUserMap.keySet().stream()
+                .sorted((x, s) -> loginUserMap.get(s).compareTo(loginUserMap.get(s)))
+                .collect(Collectors.toList());
 
-        //fill response
-        for (int i = offset; i < uniqMessages.size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {
-            Message message = uniqMessages.get(i);
+        for (int i = offset; i < loginUserMap.keySet().size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {
+            String message = strings.get(i);
             DialogMessageInResponse d;
-            if (!message.getSender().equals(currentUsername)) {
-                d = new DialogMessageInResponse(message.getSender(), message);
-            } else {
-                d = new DialogMessageInResponse(message.getToUsername(), message);
-            }
+            d = new DialogMessageInResponse(message, loginUserMap.get(message));
             dialogs.add(d);
         }
         log.debug("returned list of contacts: " + contactsResponse.getDialogs().size());

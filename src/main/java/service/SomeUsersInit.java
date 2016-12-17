@@ -136,12 +136,21 @@ public class SomeUsersInit {
                 "IliaGulkov",
                 messageRepository);
         Dialog dialog = Dialog.generate(dialogRepository, i);
+        i.addDialog(dialog.getDialogName());
+        d.addDialog(dialog.getDialogName());
+        dialog.addUser(d.getUsername());
+        Message helloTOCONF = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
+                "IlilaGulkov",
+                dialog.getDialogId(),
+                messageRepository);
         Token token = new Token("DanilsTOken", "DanilKashin");
         tokenRepository.save(token);
         userRepository.save(d);
         userRepository.save(i);
         messageRepository.save(helloFromDanil);
+        messageRepository.save(helloTOCONF);
         tokenRepository.save(token2);
         userRepository.save(user1);
+        dialogRepository.save(dialog);
     }
 }

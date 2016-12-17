@@ -18,6 +18,7 @@ import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
@@ -34,12 +35,12 @@ public class GetMessagesControllerTest extends BaseControllerForAllTests {
 
     @Test
     public void getCustomMessageAfterSomeTime() throws Exception {
-
         mockMvc.perform(get("/kek1/messages/ilia"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].content", is("hello")))
                 .andExpect(jsonPath("$.messages[0].sender", is("ilia")))
-                .andExpect(jsonPath("$.messages[1].sender", is("pavel")));
+                .andExpect(jsonPath("$.messages[1].sender", is("ilia")))
+                .andExpect(jsonPath("$.messages[2].sender", is("pavel")));
     }
 
 
@@ -49,8 +50,9 @@ public class GetMessagesControllerTest extends BaseControllerForAllTests {
     public void getCustomLimitAndSkip() throws Exception {
         mockMvc.perform(get("/kek1/messages/ilia/limit/1/skip/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messages[0].content", is("hello")))
-                .andExpect(jsonPath("$.messages[0].sender", is("ilia")));
+                .andExpect(jsonPath("$.messages[0].content", is("helloAgain")))
+                .andExpect(jsonPath("$.messages[0].sender", is("ilia")))
+                .andDo(print());
 
     }
 

@@ -17,7 +17,7 @@ public class User implements Storage {
 
     private String password;
 
-    private String dialogList;
+    private String dialogList = "";
 
     public String getDisplayName() {
         return displayName;
@@ -56,15 +56,15 @@ public class User implements Storage {
         return dialogList.contains(userName);
     }
 
-    public void addUser(String dialog) {
-        add(dialogList, dialog);
+    public void addDialog(String dialog) {
+        dialogList = add(dialogList, dialog);
     }
 
-    public void deleteUser(String dialog) {
-        delete(dialogList, dialog);
+    public void deleteDialog(String dialog) {
+        dialogList = delete(dialogList, dialog);
     }
 
-    public List<String> getUserNameList() {
+    public List<String> getDialogList() {
         return getList(dialogList);
     }
 

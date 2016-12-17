@@ -49,19 +49,15 @@ public class Dialog implements Serializable, Storage {
     }
 
     public void addUser(String userName) {
-        add(userList, userName);
+        userList = add(userList, userName);
     }
 
     public void deleteUser(String userName) {
-        delete(userList, userName);
+        userList = delete(userList, userName);
     }
 
     public List<String> getUserNameList() {
-        if (userList.equals(""))
-            return new ArrayList<String>();
-        if (!userList.contains(";"))
-            return Arrays.asList(userList);
-        return Arrays.stream(userList.split(";")).collect(Collectors.toList());
+        return getList(userList);
     }
 
     public void setOwner(String owner) {

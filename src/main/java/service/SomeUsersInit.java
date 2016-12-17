@@ -73,21 +73,22 @@ public class SomeUsersInit {
                 "danil",
                 "pavel",
                 messageRepository);
-        Thread.sleep(1000);
+        Thread.sleep(1002);
         Message helloFromIlia = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "ilia",
                 "pavel",
                 messageRepository);
-        Thread.sleep(1000);
+        Thread.sleep(1002);
         Message helloFromIlia2 = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloAgain"),
                 "ilia",
                 "pavel",
                 messageRepository);
+        Thread.sleep(1002);
         Message helloFromPavel = Message.getFromJSONinput(new JSONInputRequestMessage("text", "hello"),
                 "pavel",
                 "ilia",
                 messageRepository);
-        Thread.sleep(1000);
+        Thread.sleep(1002);
         Message helloFROMBOSS = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
                 "BigBoss",
                 "danil",
@@ -136,11 +137,8 @@ public class SomeUsersInit {
                 messageRepository);
         Dialog dialog = Dialog.generate(dialogRepository, i);
         Token token = new Token("DanilsTOken", "DanilKashin");
-
-
         tokenRepository.save(token);
         userRepository.save(d);
-
         userRepository.save(i);
         messageRepository.save(helloFromDanil);
         tokenRepository.save(token2);

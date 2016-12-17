@@ -50,6 +50,10 @@ public class ConferenceController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
         }
         Dialog generatedDialog = Dialog.generate(dialogRepository, user);
+
+        user.addDialog(generatedDialog.getDialogName());
+        userRepository.save(user);
+
         systemDialogAssertion("created", generatedDialog);
         return new ResponseEntity<>(new ReturnDialogConferenceId(generatedDialog.getDialogName()), HttpStatus.OK);
     }
@@ -67,14 +71,19 @@ public class ConferenceController extends BaseController {
             Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
             User inviter = getUserFromDataBase(auth_token);
             User toInviteUser = userRepository.findByUsername(user_id);
+
             if (toInviteUser == null) {
                 return new ResponseEntity<>(new ErrorResponseObject("user is not exist"), HttpStatus.FORBIDDEN);
             }
+
             dialogFromDataBase.addUser(user_id);
             systemDialogAssertion(
                     "invited|" + toInviteUser.getUsername(),
                     dialogFromDataBase);
             dialogRepository.save(dialogFromDataBase);
+
+            toInviteUser.addDialog(dialogFromDataBase.getDialogName());
+            userRepository.save(toInviteUser);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
         }
@@ -91,10 +100,21 @@ public class ConferenceController extends BaseController {
         Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
         User userFromDataBase = getUserFromDataBase(auth_token);
         String owner = userFromDataBase.getUsername();
+
+        User userToKick = userRepository.findByUsername(user_id);
+
+        if (userToKick == null) {
+            log.error("No such user to kick");
+            return new ResponseEntity<>(new ErrorResponseObject("No such user to kick"), HttpStatus.FORBIDDEN);
+        }
         if (dialogFromDataBase.getOwner().equals(owner)) {
             systemDialogAssertion("kicked|" + userFromDataBase.getUsername(), dialogFromDataBase);
             dialogFromDataBase.deleteUser(user_id);
             dialogRepository.save(dialogFromDataBase);
+
+            userToKick.deleteDialog(dialogFromDataBase.getDialogName());
+            userRepository.save(userToKick);
+
             log.info("succes kick from conference");
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -111,6 +131,7 @@ public class ConferenceController extends BaseController {
         Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
         User userFromDataBase = getUserFromDataBase(auth_token);
         String username = userFromDataBase.getUsername();
+
         if (dialogFromDataBase.getOwner().equals(username)) {
             log.error("user can't leave from own conference");
             return new ResponseEntity<>(new ErrorResponseObject("user can't leave from own conference"), HttpStatus.FORBIDDEN);
@@ -118,6 +139,10 @@ public class ConferenceController extends BaseController {
             systemDialogAssertion("left|" + userFromDataBase.getUsername(), dialogFromDataBase);
             dialogFromDataBase.deleteUser(username);
             dialogRepository.save(dialogFromDataBase);
+
+            userFromDataBase.deleteDialog(dialogFromDataBase.getDialogName());
+            userRepository.save(userFromDataBase);
+
             log.info("user " + userFromDataBase.getUsername() + " leave from " + dialogFromDataBase.getDialogId());
             return new ResponseEntity<>(HttpStatus.OK);
         }

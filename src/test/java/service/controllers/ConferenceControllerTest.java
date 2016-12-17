@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import service.entity.Dialog;
+import service.entity.User;
 import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -48,6 +49,11 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
         mockMvc.perform(get("/BATTOKEN/conferences/" + batyaConfs
                 .get(0).getDialogId() + "/invite/" + "BATYA2"))
                 .andExpect(status().isOk());
+
+        User batya2 = userRepository.findByUsername("BATYA2");
+        assertTrue(batya2.getDialogList().size() != 0);
+
+
         batyaConfs = dialogRepository.findByOwner("BATYA");
         assertTrue(batyaConfs.get(0).getUserNameList().contains("BATYA2"));
     }
@@ -71,6 +77,9 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
                 .get(0).getDialogId() + "/kick/" + "BATYA"))
                 .andExpect(status().isOk());
 
+        User batya2 = userRepository.findByUsername("BATYA");
+        assertTrue(batya2.getDialogList().size() == 0);
+
         batyaConfs = dialogRepository.findByOwner("BATYA2");
         assertTrue(!batyaConfs.get(0).getUserNameList().contains("BATYA"));
     }
@@ -93,6 +102,9 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
         mockMvc.perform(get("/BATTOKEN/conferences/" + batyaConfs
                 .get(0).getDialogId() + "/leave"))
                 .andExpect(status().isOk());
+
+        User batya2 = userRepository.findByUsername("BATYA");
+        assertTrue(batya2.getDialogList().size() == 0);
 
         batyaConfs = dialogRepository.findByOwner("BATYA3");
         assertTrue(!batyaConfs.get(0).getUserNameList().contains("BATYA"));
@@ -119,13 +131,17 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
                 .andExpect(jsonPath("$.originator", is("BATYA4")))
                 .andExpect(jsonPath("$.users[0].user_id", is("BATYA")))
                 .andDo(print());
-            }
+    }
 
 
     @Test
     public void createDialog() throws Exception {
         mockMvc.perform(get("/kek23/conferences/create"))
                 .andExpect(status().isOk());
+
+        User pavell = userRepository.findByUsername("pavell");
+
+        assertTrue(pavell.getDialogList().size() == 1);
 
         assertTrue(dialogRepository.findByOwner("pavell").size() == 1);
 

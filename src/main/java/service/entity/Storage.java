@@ -18,7 +18,7 @@ public interface Storage {
         return Arrays.stream(from.split(";")).collect(Collectors.toList());
     }
 
-    default void add(String from, String toadd) {
+    default String add(String from, String toadd) {
         if (from.equals("")) {
             from += toadd;
         } else if (!from.contains(";")) {
@@ -34,9 +34,10 @@ public interface Storage {
             }
 
         }
+        return from;
     }
 
-    default void delete(String from, String todel) {
+    default String delete(String from, String todel) {
         if (from.contains(todel)) {
             if (!from.contains(";")) {
                 from = "";
@@ -54,5 +55,6 @@ public interface Storage {
                 }
             }
         }
+        return from;
     }
 }

@@ -174,7 +174,7 @@ public class GetMessagesController extends BaseController {
             messageToRetunr.addAll(dialog);
         }
         //fill response object
-        for (int i = skip; i < messageToRetunr.size() && i - skip <= limit; i++) {
+        for (int i = skip; i < messageToRetunr.size() && i - skip < limit; i++) {
             messageList.add(messageToRetunr.get(i));
         }
         Collections.reverse(messageList);
@@ -183,7 +183,7 @@ public class GetMessagesController extends BaseController {
                 + response.getMessages().size() +
                 "ones");
         if (messageList.size() > 2) {
-            log.debug("last message content " + messageList.get(messageList.size() - 1).getContent());
+            log.debug("above last message content " + messageList.get(messageList.size() - 1).getContent());
             log.debug("last message content " + messageList.get(0).getContent());
         }
 

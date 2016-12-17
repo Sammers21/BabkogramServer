@@ -64,7 +64,7 @@ public class GetContactsControllerTest extends BaseControllerForAllTests {
                 .andExpect(jsonPath("$.dialogs[0].dialog_id", is("ilia")))
                 .andExpect(jsonPath("$.dialogs[1].dialog_id", is("danil")))
                 .andExpect(jsonPath("$.dialogs[1].last_message.content", is("hello")))
-                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("helloAgain")));
+                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("hello")));
 
     }
 

@@ -107,9 +107,17 @@ public class GetContactsController extends BaseController {
     private ContactsResponse getContactsWithOffset(String currentUsername, int offset) {
         ContactsResponse contactsResponse = new ContactsResponse();
         ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
+
+        //query mesages
         List<Message> messages = messageRepository.findByToUsername(currentUsername);
         List<Message> messages2 = messageRepository.findBySender(currentUsername);
+
+
+        //map to fill
         HashMap<String, Message> loginUserMap = new HashMap<>();
+        //fill map
+
+
         for (Message message : messages) {
             if (loginUserMap.containsKey(message.getSender())
                     && loginUserMap.get(message.getSender()).getTimestamp() < message.getTimestamp()) {
@@ -126,7 +134,13 @@ public class GetContactsController extends BaseController {
                 loginUserMap.put(message.getToUsername(), message);
             }
         }
+
+
+
+        //sort messages by timestamp
         List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
+
+        //fill response
         for (int i = offset; i < uniqMessages.size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {
             Message message = uniqMessages.get(i);
             DialogMessageInResponse d;

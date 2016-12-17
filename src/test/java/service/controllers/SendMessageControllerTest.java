@@ -107,6 +107,9 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].content",is("invited|BATYA")))
                 .andExpect(jsonPath("$.messages[1].content",is("hello at all")));
+
+        mockMvc.perform(get("/BATTOKEN/contacts"))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello at all")));
     }
 
 

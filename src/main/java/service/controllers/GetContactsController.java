@@ -19,11 +19,9 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static service.controllers.SendMessageController.checkToken;
 import static service.controllers.SendMessageController.checkUser;
@@ -94,17 +92,23 @@ public class GetContactsController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(getContactsWithOffset(current.getUsername(), offset), HttpStatus.OK);
+        return new ResponseEntity<>(getContactsWithOffset(current, offset), HttpStatus.OK);
     }
 
     /**
      * insert from repository method
      *
-     * @param currentUsername user's token
-     * @param offset          how much dialogs should be skipped
+     * @param user   user
+     * @param offset how much dialogs should be skipped
      * @return response
      */
-    private ContactsResponse getContactsWithOffset(String currentUsername, int offset) {
+    private ContactsResponse getContactsWithOffset(User user, int offset) {
+
+        String currentUsername = user.getUsername();
+
+        //get dialogs
+
+
         ContactsResponse contactsResponse = new ContactsResponse();
         ArrayList<DialogMessageInResponse> dialogs = contactsResponse.getDialogs();
 
@@ -117,6 +121,15 @@ public class GetContactsController extends BaseController {
         HashMap<String, Message> loginUserMap = new HashMap<>();
         //fill map
 
+        //dialogs
+        List<Message> DialoglastMessages = user.getDialogList()
+                .stream()
+                .map(s -> messageRepository.findByToUsername(s))
+                .map(s -> s.stream().max(Comparator.comparingLong(Message::getTimestamp)).get())
+                .collect(Collectors.toList());
+        for (Message message : DialoglastMessages) {
+            loginUserMap.put(message.getSender(), message);
+        }
 
         for (Message message : messages) {
             if (loginUserMap.containsKey(message.getSender())
@@ -134,7 +147,6 @@ public class GetContactsController extends BaseController {
                 loginUserMap.put(message.getToUsername(), message);
             }
         }
-
 
 
         //sort messages by timestamp

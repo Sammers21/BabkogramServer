@@ -24,3 +24,4 @@
 rest-server.iml
 logs/*.log
 target
+logs

@@ -6,6 +6,7 @@
     <groupId>org.batya.servrer</groupId>
     <artifactId>rest-server</artifactId>
     <version>1.6.RELEASE</version>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

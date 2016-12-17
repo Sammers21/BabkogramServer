@@ -64,6 +64,7 @@ response
     
 15 GET /:auth_token/search_users/:search_request
    
+18  POST /:auth_token
 
 =================
 

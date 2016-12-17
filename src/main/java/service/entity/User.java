@@ -13,6 +13,10 @@ public class User implements Storage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     private String username;
 
     private String password;

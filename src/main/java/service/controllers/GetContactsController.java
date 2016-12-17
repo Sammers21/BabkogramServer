@@ -127,6 +127,7 @@ public class GetContactsController extends BaseController {
                 .map(s -> messageRepository.findByToUsername(s))
                 .map(s -> s.stream().max(Comparator.comparingLong(Message::getTimestamp)).get())
                 .collect(Collectors.toList());
+
         for (Message message : DialoglastMessages) {
             loginUserMap.put(message.getSender(), message);
         }

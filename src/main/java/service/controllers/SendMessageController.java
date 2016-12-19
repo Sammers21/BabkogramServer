@@ -53,7 +53,7 @@ public class SendMessageController extends BaseController {
         }
         TimeStampResponse tsr = new TimeStampResponse(Instant.now().getEpochSecond() + "");
         if (dialog_id.charAt(0) == '+') {
-            log.debug("deal with dialog");
+            log.info("message was sent into dialog");
             Dialog dialogFromDataBase;
             try {
                 dialogFromDataBase = getDialogFromDataBase(auth_token, dialog_id);
@@ -73,7 +73,7 @@ public class SendMessageController extends BaseController {
            // sendMesaageToDialogMembers(message, dialogFromDataBase);
 
         } else {
-            log.debug("deal with user");
+            log.info("message was sent to user");
             User receiver = userRepository.findByUsername(dialog_id);
             if (checkAndSend(jsonInputRequestMessage, sender, receiver)) {
                 log.error("no such receiver");

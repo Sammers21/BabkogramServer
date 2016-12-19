@@ -10,5 +10,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByUsername(String username);
 
-    List<User> findTop25ByUsernameContaining(String username);
+    List<User> findTop25ByUsernameContainingIgnoreCase(String username);
+
+    List<User> findTop25ByDisplayNameContainingIgnoreCase(String displayName);
 }

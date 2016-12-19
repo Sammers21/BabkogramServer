@@ -3,7 +3,6 @@ package service.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,9 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,12 +34,22 @@ public class SearchByUsersController extends BaseController {
     ) {
 
         List<String> userIds = userRepository
-                .findTop25ByUsernameContaining(search_request)
+                .findTop25ByUsernameContainingIgnoreCase(search_request)
                 .stream()
-                .map(s -> s.getUsername())
+                .map(User::getUsername)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(new SearchResponse(userIds), HttpStatus.OK);
+        List<String> userNames = userRepository
+                .findTop25ByDisplayNameContainingIgnoreCase(search_request)
+                .stream()
+                .map(User::getUsername)
+                .collect(Collectors.toList());
+
+        HashSet<String> hs=new HashSet<>();
+        hs.addAll(userIds);
+        hs.addAll(userNames);        List<String> result = hs.stream().limit(25).collect(Collectors.toList());
+
+        return new ResponseEntity<>(new SearchResponse(result), HttpStatus.OK);
 
 
     }

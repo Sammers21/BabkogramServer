@@ -39,7 +39,7 @@ public class GetMessagesController extends BaseController {
                     @PathVariable String dialog_id,
                     @PathVariable long timestamp
             ) {
-        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp);
+        log.debug("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp);
 
         return getMessages(auth_token, dialog_id, DEFAULT_COUNT_OF_MESSAGES, 0, timestamp);
     }
@@ -52,7 +52,7 @@ public class GetMessagesController extends BaseController {
                     @PathVariable int limit,
                     @PathVariable long timestamp
             ) {
-        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp + "/limit/" + limit);
+        log.debug("mapping /" + auth_token + "/messages/" + dialog_id + "/after/" + timestamp + "/limit/" + limit);
 
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
@@ -63,7 +63,7 @@ public class GetMessagesController extends BaseController {
                     @PathVariable String auth_token,
                     @PathVariable String dialog_id
             ) {
-        log.info("mapping /" + auth_token + "/messages/" + dialog_id);
+        log.debug("mapping /" + auth_token + "/messages/" + dialog_id);
 
         return getMessages(auth_token, dialog_id, DEFAULT_COUNT_OF_MESSAGES, 0, 0);
     }
@@ -75,7 +75,7 @@ public class GetMessagesController extends BaseController {
                     @PathVariable String dialog_id,
                     @PathVariable int limit
             ) {
-        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit);
+        log.debug("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit);
 
         return getMessages(auth_token, dialog_id, limit, 0, 0);
     }
@@ -89,7 +89,7 @@ public class GetMessagesController extends BaseController {
                     @PathVariable int offset
             ) {
 
-        log.info("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit + "/skip/" + offset);
+        log.debug("mapping /" + auth_token + "/messages/" + dialog_id + "/limit/" + limit + "/skip/" + offset);
         return getMessages(auth_token, dialog_id, limit, offset, 0);
     }
 
@@ -163,7 +163,7 @@ public class GetMessagesController extends BaseController {
             ArrayList<Message> toFrom = new ArrayList<>();
             toFrom.addAll(setOf);
 
-            log.info("dialog between " + toUser.getUsername() + " and " + dialog_id);
+            log.debug("dialog between " + toUser.getUsername() + " and " + dialog_id);
 
             //filter messages
             List<Message> dialog = toFrom.stream().filter(
@@ -178,7 +178,7 @@ public class GetMessagesController extends BaseController {
             messageList.add(messageToRetunr.get(i));
         }
         Collections.reverse(messageList);
-        log.info("dialog between " + toUser.getUsername() +
+        log.debug("dialog between " + toUser.getUsername() +
                 " and " + dialog_id + " return "
                 + response.getMessages().size() +
                 "ones");

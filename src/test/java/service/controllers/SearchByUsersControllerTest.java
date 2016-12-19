@@ -28,6 +28,16 @@ public class SearchByUsersControllerTest extends BaseControllerForAllTests {
         mockMvc.perform(get("/BATTOKEN/search_users/ilia"))
                 .andExpect(jsonPath("$.user_ids",hasItem("ilia")));
     }
+    @Test
+    public void searchCaseInsensitive() throws Exception {
+        mockMvc.perform(get("/BATTOKEN/search_users/iLia"))
+                .andExpect(jsonPath("$.user_ids",hasItem("ilia")));
+    }
+    @Test
+    public void searchCaseInsensitiveAndByDisplayedname() throws Exception {
+        mockMvc.perform(get("/BATTOKEN/search_users/ILIaGULK"))
+                .andExpect(jsonPath("$.user_ids",hasItem("ilia")));
+    }
 
     @Autowired
     public void setup(MockMvc mockMvc, UserRepository userRepository, TokenRepository tokenRepository, DialogRepository dialogRepository, MessageRepository messageRepository) {

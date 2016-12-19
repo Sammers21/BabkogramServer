@@ -41,6 +41,7 @@ public class SomeUsersInit {
         User user3 = new User("danil", "123");
         User user4 = new User("BigBoss", "123");
         User user2 = new User("ilia", "bestprogrammer");
+        user2.setDisplayName("ILIAGULK");
         User user5 = new User("ilia2", "bestprogrammer");
         User user6 = new User("pavel2", "bestprogrammer");
         userRepository.save(user6);

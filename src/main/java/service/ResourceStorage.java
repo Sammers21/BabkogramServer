@@ -24,12 +24,12 @@ public class ResourceStorage implements Storage {
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file, String fname) {
         try {
             if (file.isEmpty()) {
                 throw new RuntimeException("Failed to store empty file " + file.getOriginalFilename());
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(fname));
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }

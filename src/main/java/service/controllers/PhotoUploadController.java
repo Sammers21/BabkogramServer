@@ -39,9 +39,11 @@ public class PhotoUploadController extends BaseController {
 
     @PostMapping
     public ResponseEntity<?> handleFileUpload(
-            @RequestParam("file") MultipartFile file
+            @RequestParam("file") MultipartFile file,
+            @PathVariable String auth_token
     ) {
-        storage.store(file);
+        User userFromDataBase = getUserFromDataBase(auth_token);
+        storage.store(file, userFromDataBase.getUsername());
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
 

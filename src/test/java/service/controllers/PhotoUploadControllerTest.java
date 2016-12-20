@@ -1,7 +1,5 @@
 package service.controllers;
 
-import org.codehaus.groovy.control.io.ReaderSource;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import service.ResourceStorage;
+import service.fileIO.ResourceStorage;
 import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
@@ -22,20 +20,13 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.*;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-import static java.nio.file.StandardOpenOption.READ;
-import static java.nio.file.StandardOpenOption.WRITE;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 

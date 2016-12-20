@@ -1,4 +1,4 @@
-package service;
+package service.fileIO;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

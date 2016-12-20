@@ -64,6 +64,10 @@ response
     
 15 GET /:auth_token/search_users/:search_request
    
+16  GET /:auth_token/avatar/:dialog_id
+
+17 POST /:auth_token/avatar[/:conference_id]
+
 18  POST /:auth_token
 
 =================

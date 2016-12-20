@@ -55,7 +55,7 @@ public class SetNameController extends BaseController {
     }
 
     @RequestMapping(value = "/{dialog_id}", method = RequestMethod.POST)
-    ResponseEntity<?> setNameOfUser(
+    ResponseEntity<?> setNameOfDialog(
             @PathVariable String dialog_id,
             @PathVariable String auth_token,
             @RequestBody JSONInputNewName newName
@@ -70,22 +70,29 @@ public class SetNameController extends BaseController {
             dialog.setDialogName(newName.getNew_name());
             dialogRepository.save(dialog);
         }
-        // if user
         else {
-            User user = null;
+            log.error("dialog_id must start with +");
+            return new ResponseEntity<>(new ErrorResponseObject("dialog_id must start with +"), HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping( method = RequestMethod.POST)
+    ResponseEntity<?> setNameOfUser(
+            @PathVariable String auth_token,
+            @RequestBody JSONInputNewName newName
+    ) {
+        // if user
             try {
-                user = getUserFromDataBase(auth_token);
-                if (!user.getUsername().equals(dialog_id)) {
-                    log.error("only user can change own username");
-                    return new ResponseEntity<>(new ErrorResponseObject("only user can change own username"), HttpStatus.FORBIDDEN);
-                }
+                User user = getUserFromDataBase(auth_token);
                 user.setDisplayName(newName.getNew_name());
                 userRepository.save(user);
             } catch (IllegalArgumentException e) {
                 log.error("no such user");
                 return new ResponseEntity<>(new ErrorResponseObject("no such user"), HttpStatus.FORBIDDEN);
             }
-        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -47,7 +47,7 @@ public class SetNameControllerTest extends BaseControllerForAllTests {
 
     @Test
     public void setNameOfUser() throws Exception {
-        mockMvc.perform(post("/DanilsTOken/name/DanilKashin")
+        mockMvc.perform(post("/DanilsTOken/name")
                 .content(json(new JSONInputNewName("Danil Kashin")))
                 .contentType(contentType))
                 .andDo(print())
@@ -72,10 +72,6 @@ public class SetNameControllerTest extends BaseControllerForAllTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.dialog_name", is("New Name Of Dialog")));
 
-        mockMvc.perform(post("/DanilsTOken/name/IliaGulkov")
-                .content(json(new JSONInputNewName("Ilias new name")))
-                .contentType(contentType))
-                .andExpect(status().isForbidden());
     }
 
 

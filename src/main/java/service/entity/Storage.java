@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by student on 17.12.16.
- */
 public interface Storage {
 
     default List<String> getList(String from) {

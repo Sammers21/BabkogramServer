@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -29,6 +30,8 @@ public class ResourceStorage implements Storage {
             if (file.isEmpty()) {
                 throw new RuntimeException("Failed to store empty file " + file.getOriginalFilename());
             }
+            if (rootLocation.resolve(fname).toFile().exists())
+                Files.delete(rootLocation.resolve(fname));
             Files.copy(file.getInputStream(), this.rootLocation.resolve(fname));
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
@@ -71,6 +74,11 @@ public class ResourceStorage implements Storage {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    @Override
+    public boolean isExist(String fname) {
+        return rootLocation.resolve(fname).toFile().exists();
     }
 
     @Override

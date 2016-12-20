@@ -21,5 +21,7 @@ public interface Storage {
 
     void deleteAll();
 
+    boolean isExist(String fname);
+
 
 }

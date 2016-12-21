@@ -41,17 +41,21 @@ public class SendMessageController extends BaseController {
             @PathVariable String dialog_id,
             @RequestBody JSONInputRequestMessage jsonInputRequestMessage
     ) {
+        //validate token
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
             log.error("invalid token");
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
+        //validate user
         User sender = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, sender)) {
             log.error("Destination user does not exist");
             return new ResponseEntity<>(new ErrorResponseObject("Destination user does not exist"), HttpStatus.FORBIDDEN);
         }
+        //current timestamp
         TimeStampResponse tsr = new TimeStampResponse(Instant.now().getEpochSecond() + "");
+        //if receiver is dialog
         if (dialog_id.charAt(0) == '+') {
             log.info("message was sent into dialog");
             Dialog dialogFromDataBase;
@@ -69,57 +73,36 @@ public class SendMessageController extends BaseController {
                     sender.getUsername(),
                     dialogFromDataBase.getDialogId()
             );
-            messageRepository.save(message);
-           // sendMesaageToDialogMembers(message, dialogFromDataBase);
 
+            messageRepository.save(message);
+            // sendMesaageToDialogMembers(message, dialogFromDataBase);
+            //if receiver is person
         } else {
             log.info("message was sent to user");
             User receiver = userRepository.findByUsername(dialog_id);
-            if (checkAndSend(jsonInputRequestMessage, sender, receiver)) {
+            if (receiver == null) {
                 log.error("no such receiver");
                 return new ResponseEntity<>(new ErrorResponseObject("no such receiver"), HttpStatus.FORBIDDEN);
+            } else {
+                Message message = new Message(
+                        Instant.now().getEpochSecond(),
+                        genereteGuid(messageRepository),
+                        jsonInputRequestMessage.getType(),
+                        jsonInputRequestMessage.getContent(),
+                        sender.getUsername(),
+                        receiver.getUsername()
+                );
+                messageRepository.save(message);
+                log.debug("message with text" + message.getContent()
+                        + " from " + sender.getUsername() +
+                        " to " + receiver.getUsername() +
+                        " was send");
             }
-
-
         }
 
         return new ResponseEntity<>(tsr, HttpStatus.OK);
     }
 
-
-    /**
-     * operation to send message
-     *
-     * @param jsonInputRequestMessage message to sent
-     * @param sender                  user who send
-     * @param receiver                user who receive
-     * @return status
-     */
-    private boolean checkAndSend(
-            JSONInputRequestMessage jsonInputRequestMessage,
-            User sender,
-            User receiver
-    ) {
-        if (receiver == null) {
-            return true;
-        } else {
-
-            Message message = new Message(
-                    Instant.now().getEpochSecond(),
-                    genereteGuid(messageRepository),
-                    jsonInputRequestMessage.getType(),
-                    jsonInputRequestMessage.getContent(),
-                    sender.getUsername(),
-                    receiver.getUsername()
-            );
-            messageRepository.save(message);
-            log.debug("message with text" + message.getContent()
-                    + " from " + sender.getUsername() +
-                    " to " + receiver.getUsername() +
-                    " was send");
-        }
-        return false;
-    }
 
     /**
      * check some token for existence

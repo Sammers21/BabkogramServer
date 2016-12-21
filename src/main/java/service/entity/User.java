@@ -3,9 +3,11 @@ package service.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 public class User implements Storage {
@@ -13,23 +15,26 @@ public class User implements Storage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @OneToMany(cascade = ALL, mappedBy = "user")
+    @ElementCollection(targetClass = TimeStatistics.class)
+    private Set<TimeStatistics> statistics = new HashSet<TimeStatistics>();
+
+
+    public Set<TimeStatistics> getStatistics() {
+        return statistics;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    @Column(name = "username")
     private String username;
 
     private String password;
 
+    @Column(columnDefinition = "TEXT")
     private String dialogList = "";
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 
     @JsonIgnore
     private String displayName;
@@ -55,10 +60,10 @@ public class User implements Storage {
         setDisplayName(username);
     }
 
-
     public boolean contains(String userName) {
         return dialogList.contains(userName);
     }
+
 
     public void addDialog(String dialog) {
         dialogList = add(dialogList, dialog);
@@ -72,6 +77,11 @@ public class User implements Storage {
         return getList(dialogList);
     }
 
+    public void addTimeStatistics(TimeStatistics timeStatistics) {
+        timeStatistics.setUser(this);
+        statistics.add(timeStatistics);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -79,5 +89,13 @@ public class User implements Storage {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }

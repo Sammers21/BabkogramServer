@@ -24,6 +24,8 @@ public class Message implements Comparable, Serializable {
 
     private String type;
 
+    private boolean isCorrect;
+
     @Column(columnDefinition = "TEXT")
     private String content;
 
@@ -63,6 +65,7 @@ public class Message implements Comparable, Serializable {
         this.sender = sender;
         this.toUsername = toUsername;
         this.timestamp = timestamp;
+        isCorrect=true;
     }
 
     public static Message getFromJSONinput(JSONInputRequestMessage js, String from, String to, MessageRepository messageRepository) {

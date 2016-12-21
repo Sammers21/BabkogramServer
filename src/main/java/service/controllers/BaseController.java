@@ -16,6 +16,7 @@ import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,21 +114,17 @@ public class BaseController {
     public long findJoinTime(String username, Dialog dialog) {
 
         List<Message> created =
-                messageRepository.findBySenderAndContent("", "created" );
+                messageRepository.findBySenderAndContent("", "created");
         List<Message> inv =
-                messageRepository.findBySenderAndContent("", "invited|"+username);
+                messageRepository.findBySenderAndContent("", "invited|" + username);
         created.addAll(inv);
         if (created.stream()
-                .filter(
-                        s -> s.getToUsername().equals(dialog.getDialogId())
-                )
-                .max(Message::compareTo)
+                .filter(s -> s.getToUsername().equals(dialog.getDialogId()))
+                .max(Comparator.comparingLong(Message::getTimestamp))
                 .isPresent()) {
             return created.stream()
-                    .filter(
-                            s -> s.getToUsername().equals(dialog.getDialogId())
-                    )
-                    .max(Message::compareTo).get().getTimestamp();
+                    .filter(s -> s.getToUsername().equals(dialog.getDialogId()))
+                    .max(Comparator.comparingLong(Message::getTimestamp)).get().getTimestamp();
         }
         return 0;
 

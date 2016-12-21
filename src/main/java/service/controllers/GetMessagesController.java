@@ -149,7 +149,7 @@ public class GetMessagesController extends BaseController {
             List<Message> messagesToDilaog = messageRepository.findByToUsername(dialog_id);
 
             List<Message> collcted = messagesToDilaog.stream().
-                    filter(s -> s.getTimestamp() > joinTime)
+                    filter(s -> s.getTimestamp() >= joinTime)
                     .sorted(Message::compareTo)
                     .collect(Collectors.toList());
 

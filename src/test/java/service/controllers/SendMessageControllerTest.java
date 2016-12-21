@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -103,10 +104,24 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
                 .contentType(contentType))
                 .andExpect(status().isOk());
 
+
+        Thread.sleep(2000);
         mockMvc.perform(get("/BATTOKEN6/messages/"+ batyaConfs.get(0).getDialogId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messages[0].content",is("invited|BATYA6")))
                 .andExpect(jsonPath("$.messages[1].content",is("hello at all")));
+
+
+        Thread.sleep(2000);
+
+        mockMvc.perform(get("/BATTOKEN5/messages/"+ batyaConfs.get(0).getDialogId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.messages[0].content",is("created")))
+                .andExpect(jsonPath("$.messages[1].content",is("invited|BATYA6")))
+                .andExpect(jsonPath("$.messages[2].content",is("hello at all")))
+                .andDo(print());
+
+
 
         mockMvc.perform(get("/BATTOKEN6/contacts"))
                 .andExpect(status().isOk())

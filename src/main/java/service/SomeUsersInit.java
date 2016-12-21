@@ -1,4 +1,4 @@
-package service.fileIO;
+package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -118,7 +118,7 @@ public class SomeUsersInit {
         Token tokenBat3 = new Token("BATTOKEN3", "BATYA3");
         Token tokenBat4 = new Token("BATTOKEN4", "BATYA4");
         Token tokenBat5 = new Token("BATTOKEN5", "BATYA5");
-        Token tokenBat6 = new Token("BATTOKEN6", "BATYA5");
+        Token tokenBat6 = new Token("BATTOKEN6", "BATYA6");
         tokenRepository.save(tokenBat);
         tokenRepository.save(tokenBat2);
         tokenRepository.save(tokenBat4);

@@ -98,4 +98,15 @@ public class TimeStatistics {
     public TimeStatistics() {
 
     }
+
+    @Override
+    public String toString() {
+        return "TimeStatistics{" +
+                "month=" + month +
+                ", day=" + day +
+                ", year=" + year +
+                ", coutOfMistakes=" + coutOfMistakes +
+                ", totalCoutOfWords=" + totalCoutOfWords +
+                '}';
+    }
 }

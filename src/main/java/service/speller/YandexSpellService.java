@@ -138,7 +138,7 @@ public class YandexSpellService extends Thread {
     private void reportStatistics(List<Integer> messageState, User user, long time) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(time);
+        cal.setTimeInMillis(time * 1000);
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);

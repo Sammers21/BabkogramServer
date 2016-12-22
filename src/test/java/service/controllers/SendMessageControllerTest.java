@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import service.BaseControllerForAllTests;
 import service.entity.Dialog;
+import service.entity.TimeStatistics;
+import service.entity.User;
 import service.objects.JSONInputRequestMessage;
 import service.repository.DialogRepository;
 import service.repository.MessageRepository;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
@@ -78,9 +81,6 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
                 .content(this.json(new JSONInputRequestMessage("text", bigText.toString())))
                 .contentType(contentType))
                 .andExpect(status().isOk());
-
-        Thread.sleep(10000);
-
 
     }
 

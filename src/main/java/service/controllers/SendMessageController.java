@@ -17,6 +17,7 @@ import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
+import service.speller.YandexSpellService;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class SendMessageController extends BaseController {
             @PathVariable String auth_token,
             @PathVariable String dialog_id,
             @RequestBody JSONInputRequestMessage jsonInputRequestMessage
-    ) {
+    ) throws InterruptedException {
         //validate token
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
@@ -75,6 +76,7 @@ public class SendMessageController extends BaseController {
             );
 
             messageRepository.save(message);
+            yandexSpellService.asyncTask(message);
             // sendMesaageToDialogMembers(message, dialogFromDataBase);
             //if receiver is person
         } else {
@@ -93,6 +95,7 @@ public class SendMessageController extends BaseController {
                         receiver.getUsername()
                 );
                 messageRepository.save(message);
+                yandexSpellService.asyncTask(message);
                 log.debug("message with text" + message.getContent()
                         + " from " + sender.getUsername() +
                         " to " + receiver.getUsername() +
@@ -129,6 +132,8 @@ public class SendMessageController extends BaseController {
         return false;
     }
 
+    @Autowired
+    private YandexSpellService yandexSpellService;
 
     @Autowired
     public SendMessageController(UserRepository userRepository, DialogRepository dialogRepository, TokenRepository tokenRepository, MessageRepository messageRepository) {

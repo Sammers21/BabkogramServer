@@ -1,6 +1,5 @@
 package service.controllers;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import service.entity.Message;
-import service.entity.Token;
-import service.entity.User;
-import service.objects.JSONInputRequestMessage;
+import service.BaseControllerForAllTests;
 import service.repository.DialogRepository;
 import service.repository.MessageRepository;
 import service.repository.TokenRepository;

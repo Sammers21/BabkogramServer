@@ -15,7 +15,7 @@ public class User implements Storage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToMany(cascade = ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, cascade = ALL, mappedBy = "user")
     @ElementCollection(targetClass = TimeStatistics.class)
     private Set<TimeStatistics> statistics = new HashSet<TimeStatistics>();
 

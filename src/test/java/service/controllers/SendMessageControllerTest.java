@@ -13,6 +13,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import service.BaseControllerForAllTests;
 import service.entity.Dialog;
 import service.objects.JSONInputRequestMessage;
 import service.repository.DialogRepository;
@@ -70,13 +71,17 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
     @Test
     public void longMessageTest() throws Exception {
         StringBuilder bigText = new StringBuilder("");
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100; i++) {
             bigText.append("veryVeryBigTExt");
         }
         mockMvc.perform(post("/bestToken20/messages/send/ilia2")
                 .content(this.json(new JSONInputRequestMessage("text", bigText.toString())))
                 .contentType(contentType))
                 .andExpect(status().isOk());
+
+        Thread.sleep(10000);
+
+
     }
 
     @Test

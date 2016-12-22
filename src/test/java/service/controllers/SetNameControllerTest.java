@@ -12,6 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import service.BaseControllerForAllTests;
 import service.entity.Dialog;
 import service.entity.User;
 import service.objects.JSONInputNewName;

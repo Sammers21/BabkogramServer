@@ -45,7 +45,8 @@ public class Dialog implements Serializable, Storage {
     }
 
     public boolean contains(String userName) {
-        return userList.contains(userName);
+        return getUserNameList().stream()
+                .filter(s -> s.equals(userName)).count() == 1;
     }
 
     public void addUser(String userName) {

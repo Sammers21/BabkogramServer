@@ -122,7 +122,13 @@ public class GetMessagesController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject("invalid token"), HttpStatus.FORBIDDEN);
         }
 
-        MessageResponse response = getMessageResponse(dialog_id, limit, skip, timestamp, user, auth_token);
+        MessageResponse response = null;
+        try {
+            response = getMessageResponse(dialog_id, limit, skip, timestamp, user, auth_token);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
+        }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

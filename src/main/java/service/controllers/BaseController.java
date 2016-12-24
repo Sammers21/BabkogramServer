@@ -74,7 +74,7 @@ public class BaseController {
         if (byDialogId == null) {
             throw new IllegalArgumentException("no such dialog");
         }
-        if (byDialogId.contains(user.getUsername()) || user.getUsername().equals("BATYA"))
+        if (byDialogId.contains(user.getUsername()))
             return byDialogId;
         else {
             throw new IllegalArgumentException("user does not contain in dialog");

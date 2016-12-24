@@ -77,6 +77,15 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
                 .get(0).getDialogId() + "/kick/" + "BATYA"))
                 .andExpect(status().isOk());
 
+        mockMvc.perform(get("/BATTOKEN/messages/" + batyaConfs
+                .get(0).getDialogId()))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/BATTOKEN/contacts"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
         User batya2 = userRepository.findByUsername("BATYA");
         assertTrue(batya2.getDialogList().size() == 0);
 

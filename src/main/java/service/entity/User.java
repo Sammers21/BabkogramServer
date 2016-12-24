@@ -61,8 +61,9 @@ public class User implements Storage {
         setDisplayName(username);
     }
 
-    public boolean contains(String userName) {
-        return dialogList.contains(userName);
+    public boolean contains(String dialogName) {
+        return getDialogList().stream()
+                .filter(s -> s.equals(dialogName)).count() == 1;
     }
 
 

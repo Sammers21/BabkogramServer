@@ -38,7 +38,7 @@ public class GetContactsControllerTest extends BaseControllerForAllTests {
     public void getFromNoUser() throws Exception {
 
         mockMvc.perform(get("/kek4/contacts/offset/0"))
-                .andExpect(status().isOk())
+                   .andExpect(status().isOk())
                 .andExpect(jsonPath("$.dialogs[0].dialog_id", is("danil")))
                 .andExpect(jsonPath("$.dialogs[0].last_message.content", is("helloDanil")));
     }

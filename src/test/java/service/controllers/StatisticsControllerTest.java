@@ -41,7 +41,7 @@ public class StatisticsControllerTest extends BaseControllerForAllTests {
 
 
     @Test
-    public void kek1() throws Exception {
+    public void statisticsTest() throws Exception {
         mockMvc.perform(post("/bestToken20/messages/send/ilia2")
                 .content(this.json(new JSONInputRequestMessage("text", "hello ilia2")))
                 .contentType(contentType))

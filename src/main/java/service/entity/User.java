@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -79,6 +80,11 @@ public class User implements Storage {
 
     public void addTimeStatistics(TimeStatistics timeStatistics) {
         timeStatistics.setUser(this);
+        statistics.add(timeStatistics);
+    }
+
+    public void addExist(TimeStatistics timeStatistics) {
+        statistics = statistics.stream().filter(s -> !s.equals(timeStatistics)).collect(Collectors.toSet());
         statistics.add(timeStatistics);
     }
 

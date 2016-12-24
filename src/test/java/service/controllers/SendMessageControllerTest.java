@@ -62,7 +62,7 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
                 .content(this.json(new JSONInputRequestMessage("text", "hello ilia2")))
                 .contentType(contentType))
                 .andExpect(status().isOk());
-        assertTrue(messageRepository.findByContent("hello ilia2").size() == 1);
+        assertTrue(messageRepository.findByContent("hello ilia2").size() > 0);
     }
 
     @Test
@@ -111,27 +111,26 @@ public class SendMessageControllerTest extends BaseControllerForAllTests {
 
 
         Thread.sleep(2000);
-        mockMvc.perform(get("/BATTOKEN6/messages/"+ batyaConfs.get(0).getDialogId()))
+        mockMvc.perform(get("/BATTOKEN6/messages/" + batyaConfs.get(0).getDialogId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messages[0].content",is("invited|BATYA6")))
-                .andExpect(jsonPath("$.messages[1].content",is("hello at all")));
+                .andExpect(jsonPath("$.messages[0].content", is("invited|BATYA6")))
+                .andExpect(jsonPath("$.messages[1].content", is("hello at all")));
 
 
         Thread.sleep(2000);
 
-        mockMvc.perform(get("/BATTOKEN5/messages/"+ batyaConfs.get(0).getDialogId()))
+        mockMvc.perform(get("/BATTOKEN5/messages/" + batyaConfs.get(0).getDialogId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.messages[0].content",is("created")))
-                .andExpect(jsonPath("$.messages[1].content",is("invited|BATYA6")))
-                .andExpect(jsonPath("$.messages[2].content",is("hello at all")))
+                .andExpect(jsonPath("$.messages[0].content", is("created")))
+                .andExpect(jsonPath("$.messages[1].content", is("invited|BATYA6")))
+                .andExpect(jsonPath("$.messages[2].content", is("hello at all")))
                 .andDo(print());
-
 
 
         mockMvc.perform(get("/BATTOKEN6/contacts"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dialogs[0].dialog_id",is(batyaConfs.get(0).getDialogId())))
-                .andExpect(jsonPath("$.dialogs[0].last_message.content",is("hello at all")));
+                .andExpect(jsonPath("$.dialogs[0].dialog_id", is(batyaConfs.get(0).getDialogId())))
+                .andExpect(jsonPath("$.dialogs[0].last_message.content", is("hello at all")));
     }
 
 

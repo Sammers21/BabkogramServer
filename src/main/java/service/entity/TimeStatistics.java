@@ -1,7 +1,11 @@
 package service.entity;
 
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class TimeStatistics {
@@ -36,6 +40,12 @@ public class TimeStatistics {
         this.totalCoutOfWords = totalCoutOfWords;
     }
 
+    public DateTime getDate() {
+        DateTimeZone dateTimeZone = DateTimeZone.UTC;
+        DateTime dateTime = new DateTime(getYear(), getMonth(), getDay(), 0, 0, dateTimeZone);
+        return dateTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,7 +56,7 @@ public class TimeStatistics {
         if (getMonth() != that.getMonth()) return false;
         if (getDay() != that.getDay()) return false;
         if (getYear() != that.getYear()) return false;
-        return getCoutOfMistakes() == that.getCoutOfMistakes();
+        return true;
     }
 
     @Override

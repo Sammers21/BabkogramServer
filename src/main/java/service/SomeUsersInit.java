@@ -2,6 +2,7 @@ package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import service.entity.Dialog;
 import service.entity.Message;
@@ -17,6 +18,7 @@ import sun.tools.jar.CommandLine;
 import javax.annotation.PostConstruct;
 
 @Component
+@Profile("DEV")
 public class SomeUsersInit {
 
     @Autowired

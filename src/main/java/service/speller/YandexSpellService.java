@@ -149,7 +149,6 @@ public class YandexSpellService extends Thread {
                 .collect(Collectors.toList());
         if (ts2.size() != 0)
             ts = ts2.get(0);
-
         if (ts == null) {
             ts = new TimeStatistics();
             ts.setCoutOfMistakes(messageState.get(0));
@@ -157,11 +156,13 @@ public class YandexSpellService extends Thread {
             ts.setYear(year);
             ts.setMonth(month);
             ts.setDay(day);
+            user.addTimeStatistics(ts);
         } else {
             ts.setCoutOfMistakes(ts.getCoutOfMistakes() + messageState.get(0));
             ts.setTotalCoutOfWords(ts.getTotalCoutOfWords() + messageState.get(2));
+            user.addExist(ts);
+
         }
-        user.addTimeStatistics(ts);
         timeStatisticsRepository.save(ts);
         userRepository.save(user);
 

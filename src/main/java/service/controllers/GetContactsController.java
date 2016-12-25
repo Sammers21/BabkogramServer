@@ -130,20 +130,15 @@ public class GetContactsController extends BaseController {
         }
 
         for (Message message : messages) {
-            if (loginUserMap.containsKey(message.getSender())
-                    && loginUserMap.get(message.getSender()).getTimestamp() < message.getTimestamp()) {
+            if (!loginUserMap.containsKey(message.getSender())
+                    || loginUserMap.get(message.getSender()).getTimestamp() < message.getTimestamp())
                 loginUserMap.put(message.getSender(), message);
-            } else if (!loginUserMap.containsKey(message.getSender())) {
-                loginUserMap.put(message.getSender(), message);
-            }
         }
         for (Message message : messages2) {
-            if (loginUserMap.containsKey(message.getToUsername())
-                    && loginUserMap.get(message.getToUsername()).getTimestamp() < message.getTimestamp()) {
+            if ((!loginUserMap.containsKey(message.getToUsername())
+                    || loginUserMap.get(message.getToUsername()).getTimestamp() < message.getTimestamp())
+                    && !(message.getToUsername().charAt(0) == '+'))
                 loginUserMap.put(message.getToUsername(), message);
-            } else if (!loginUserMap.containsKey(message.getToUsername())) {
-                loginUserMap.put(message.getToUsername(), message);
-            }
         }
 
 

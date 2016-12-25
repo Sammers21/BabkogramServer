@@ -61,7 +61,7 @@ public class StatisticsController extends BaseController {
                     mapToLong(TimeStatistics::getCoutOfMistakes).reduce(0, (x, y) -> x + y);
             long total = statistics.stream().
                     mapToLong(TimeStatistics::getTotalCoutOfWords).reduce(0, (x, y) -> x + y);
-            return new ResponseEntity<Object>(new TImeStatResponse(total, tm), HttpStatus.OK);
+            return new ResponseEntity<Object>(new TImeStatResponse(total, total-tm), HttpStatus.OK);
         }
 
     }

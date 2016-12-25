@@ -39,7 +39,7 @@ public class SetNameController extends BaseController {
         if (dialog_id.charAt(0) == '+') {
             Dialog dialog = dialogRepository.findByDialogId(dialog_id);
             if (dialog == null) {
-                log.error("no such dialog_id");
+                log.error("no such dialog_id "+ dialog_id);
                 return new ResponseEntity<>(new ErrorResponseObject("no such dialog_id"), HttpStatus.FORBIDDEN);
             }
             name = dialog.getDialogName();

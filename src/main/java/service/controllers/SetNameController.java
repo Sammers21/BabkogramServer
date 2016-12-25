@@ -48,7 +48,7 @@ public class SetNameController extends BaseController {
         else {
             User user = userRepository.findByUsername(dialog_id);
             if (user == null) {
-                log.error("no such user");
+                log.error("no such user "+dialog_id);
                 return new ResponseEntity<>(new ErrorResponseObject("no such user"), HttpStatus.FORBIDDEN);
             }
             name = user.getDisplayName();

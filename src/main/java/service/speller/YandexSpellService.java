@@ -5,6 +5,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -79,12 +80,12 @@ public class YandexSpellService extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            log.info("start of handling message from " + message.getSender());
+            log.debug("start of handling message from " + message.getSender());
             User byUsername = userRepository.findByUsername(message.getSender());
             try {
                 List<Integer> coutOfWrongMessagesInText = getCoutOfWrongMessagesInText(message.getContent());
                 reportStatistics(coutOfWrongMessagesInText, byUsername, message.getTimestamp());
-                log.info("handled message from " + message.getSender());
+                log.debug("handled message from " + message.getSender());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ParseException e) {

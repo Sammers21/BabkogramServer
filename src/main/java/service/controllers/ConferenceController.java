@@ -115,7 +115,7 @@ public class ConferenceController extends BaseController {
             return new ResponseEntity<>(new ErrorResponseObject("No such user to kick"), HttpStatus.FORBIDDEN);
         }
         if (dialogFromDataBase.getOwner().equals(owner)) {
-            systemDialogAssertion("kicked|" + userFromDataBase.getUsername(), dialogFromDataBase);
+            systemDialogAssertion("kicked|" + userToKick.getUsername(), dialogFromDataBase);
             dialogFromDataBase.deleteUser(user_id);
             dialogRepository.save(dialogFromDataBase);
 

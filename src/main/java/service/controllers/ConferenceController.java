@@ -74,7 +74,12 @@ public class ConferenceController extends BaseController {
             User toInviteUser = userRepository.findByUsername(user_id);
 
             if (toInviteUser == null) {
+                log.error("user " + user_id + " is not exist");
                 return new ResponseEntity<>(new ErrorResponseObject("user is not exist"), HttpStatus.FORBIDDEN);
+            }
+            if (dialogFromDataBase.contains(user_id)) {
+                log.error("user " + user_id + " already in conference");
+                return new ResponseEntity<>(new ErrorResponseObject("user already in conference"), HttpStatus.FORBIDDEN);
             }
 
             dialogFromDataBase.addUser(user_id);

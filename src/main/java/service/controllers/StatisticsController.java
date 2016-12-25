@@ -18,6 +18,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class StatisticsController extends BaseController {
         User userFromDataBase;
         try {
             userFromDataBase = getUserFromDataBase(auth_token);
-        } catch (IllegalArgumentException e) {
+        } catch (FileNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<Object>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
         }
@@ -76,7 +77,7 @@ public class StatisticsController extends BaseController {
         User userFromDataBase;
         try {
             userFromDataBase = getUserFromDataBase(auth_token);
-        } catch (IllegalArgumentException e) {
+        } catch (FileNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<Object>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
         }

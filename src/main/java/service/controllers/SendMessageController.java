@@ -19,6 +19,7 @@ import service.repository.TokenRepository;
 import service.repository.UserRepository;
 import service.speller.YandexSpellService;
 
+import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -62,7 +63,7 @@ public class SendMessageController extends BaseController {
             Dialog dialogFromDataBase;
             try {
                 dialogFromDataBase = getDialogFromDataBase(auth_token, dialog_id);
-            } catch (IllegalArgumentException e) {
+            } catch (FileNotFoundException e) {
                 log.error(e.toString());
                 return new ResponseEntity<>(tsr, HttpStatus.FORBIDDEN);
             }

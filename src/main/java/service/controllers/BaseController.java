@@ -15,6 +15,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
@@ -46,38 +47,38 @@ public class BaseController {
         return false;
     }
 
-    protected User getUserFromDataBase(String auth_token) throws IllegalArgumentException {
+    protected User getUserFromDataBase(String auth_token) throws FileNotFoundException {
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
-            throw new IllegalArgumentException("Token is not exist");
+            throw new FileNotFoundException("Token is not exist");
         }
         User user = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, user)) {
-            throw new IllegalArgumentException("no such User with this token");
+            throw new FileNotFoundException("no such User with this token");
         }
         return user;
     }
 
-    protected Dialog getDialogFromDataBase(String auth_token, String dialog_id) throws IllegalArgumentException {
+    protected Dialog getDialogFromDataBase(String auth_token, String dialog_id) throws FileNotFoundException {
         if (dialog_id.charAt(0) != '+') {
-            throw new IllegalArgumentException("dialog nae must start with +");
+            throw new FileNotFoundException("dialog nae must start with +");
         }
         Token token = tokenRepository.findByToken(auth_token);
         if (checkToken(auth_token, token)) {
-            throw new IllegalArgumentException("Token is not exist");
+            throw new FileNotFoundException("Token is not exist");
         }
         User user = userRepository.findByUsername(token.getUsername());
         if (checkUser(tokenRepository, auth_token, token, user)) {
-            throw new IllegalArgumentException("no such User with this token");
+            throw new FileNotFoundException("no such User with this token");
         }
         Dialog byDialogId = dialogRepository.findByDialogId(dialog_id);
         if (byDialogId == null) {
-            throw new IllegalArgumentException("no such dialog");
+            throw new FileNotFoundException("no such dialog");
         }
         if (byDialogId.contains(user.getUsername()))
             return byDialogId;
         else {
-            throw new IllegalArgumentException("user does not contain in dialog");
+            throw new FileNotFoundException("user does not contain in dialog");
         }
     }
 

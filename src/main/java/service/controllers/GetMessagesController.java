@@ -19,6 +19,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,7 +144,7 @@ public class GetMessagesController extends BaseController {
      * @param toUser    ref to User from which messages
      * @return suitable response
      */
-    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser, String auth_token) {
+    private MessageResponse getMessageResponse(String dialog_id, int limit, int skip, long timestamp, User toUser, String auth_token) throws FileNotFoundException {
         MessageResponse response = new MessageResponse();
 
         List<Message> messageToRetunr = new ArrayList<Message>();

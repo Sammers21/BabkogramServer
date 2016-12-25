@@ -17,6 +17,8 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
+
 @RestController
 @RequestMapping("/{auth_token}/name")
 public class SetNameController extends BaseController {
@@ -88,8 +90,8 @@ public class SetNameController extends BaseController {
                 User user = getUserFromDataBase(auth_token);
                 user.setDisplayName(newName.getNew_name());
                 userRepository.save(user);
-            } catch (IllegalArgumentException e) {
-                log.error("no such user");
+            } catch (FileNotFoundException e) {
+                log.error(e.toString());
                 return new ResponseEntity<>(new ErrorResponseObject("no such user"), HttpStatus.FORBIDDEN);
             }
 

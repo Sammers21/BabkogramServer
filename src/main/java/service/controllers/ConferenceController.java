@@ -19,6 +19,7 @@ import service.repository.MessageRepository;
 import service.repository.TokenRepository;
 import service.repository.UserRepository;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class ConferenceController extends BaseController {
         User user = null;
         try {
             user = getUserFromDataBase(auth_token);
-        } catch (IllegalArgumentException e) {
+        } catch (FileNotFoundException e) {
             return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
         }
         Dialog generatedDialog = Dialog.generate(dialogRepository, user);
@@ -97,8 +98,14 @@ public class ConferenceController extends BaseController {
             @PathVariable String conference_id,
             @PathVariable String user_id
     ) {
-        Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
-        User userFromDataBase = getUserFromDataBase(auth_token);
+        Dialog dialogFromDataBase = null;
+        User userFromDataBase = null;
+        try {
+            dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
+            userFromDataBase = getUserFromDataBase(auth_token);
+        } catch (FileNotFoundException e) {
+            return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
+        }
         String owner = userFromDataBase.getUsername();
 
         User userToKick = userRepository.findByUsername(user_id);
@@ -128,8 +135,16 @@ public class ConferenceController extends BaseController {
             @PathVariable String auth_token,
             @PathVariable String conference_id
     ) {
-        Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
-        User userFromDataBase = getUserFromDataBase(auth_token);
+        Dialog dialogFromDataBase = null;
+        User userFromDataBase = null;
+        try {
+            dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
+            userFromDataBase = getUserFromDataBase(auth_token);
+        } catch (FileNotFoundException e) {
+            log.error(e.toString());
+            return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
+        }
+
         String username = userFromDataBase.getUsername();
 
         if (dialogFromDataBase.getOwner().equals(username)) {
@@ -153,7 +168,12 @@ public class ConferenceController extends BaseController {
             @PathVariable String auth_token,
             @PathVariable String conference_id
     ) {
-        Dialog dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
+        Dialog dialogFromDataBase;
+        try {
+            dialogFromDataBase = getDialogFromDataBase(auth_token, conference_id);
+        } catch (FileNotFoundException e) {
+            return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
+        }
         ConferenceUserResponse conferenceUserResponse = new ConferenceUserResponse(dialogFromDataBase.getOwner());
         ArrayList<UserInConferenceList> users = conferenceUserResponse.getUsers();
         List<UserInConferenceList> u = dialogFromDataBase.getUserNameList().stream()

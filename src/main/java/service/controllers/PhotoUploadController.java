@@ -19,6 +19,7 @@ import service.repository.UserRepository;
 
 import org.springframework.core.io.Resource;
 
+import java.io.FileNotFoundException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -57,7 +58,7 @@ public class PhotoUploadController extends BaseController {
             log.info(userFromDataBase.getUsername() + " post photo");
             storage.store(file, userFromDataBase.getUsername());
             return new ResponseEntity<Object>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
+        } catch (FileNotFoundException e) {
             log.error(e.getMessage());
             return new ResponseEntity<Object>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
         }
@@ -70,7 +71,12 @@ public class PhotoUploadController extends BaseController {
             @PathVariable String dialog_id
     ) {
         try {
-            User userFromDataBase = getUserFromDataBase(auth_token);
+            User userFromDataBase = null;
+            try {
+                userFromDataBase = getUserFromDataBase(auth_token);
+            } catch (FileNotFoundException e) {
+                return new ResponseEntity<>(new ErrorResponseObject(e.toString()), HttpStatus.FORBIDDEN);
+            }
             if (userFromDataBase.getDialogList().stream().filter(s -> s.equals(dialog_id)).collect(Collectors.toList()).size() == 1) {
                 storage.store(file, dialog_id);
                 log.info(userFromDataBase.getUsername() + " post photo onto conference " + dialog_id);

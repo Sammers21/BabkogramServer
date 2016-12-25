@@ -150,7 +150,7 @@ public class GetContactsController extends BaseController {
         //sort messages by timestamp
         //List<Message> uniqMessages = loginUserMap.values().stream().sorted(Message::compareTo).collect(Collectors.toList());
         List<String> strings = loginUserMap.keySet().stream()
-                .sorted((x, s) -> loginUserMap.get(s).compareTo(loginUserMap.get(s)))
+                .sorted(Comparator.comparingLong(x -> loginUserMap.get(x).getTimestamp()))
                 .collect(Collectors.toList());
 
         for (int i = offset; i < loginUserMap.keySet().size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {

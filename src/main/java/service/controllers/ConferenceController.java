@@ -52,7 +52,7 @@ public class ConferenceController extends BaseController {
         }
         Dialog generatedDialog = Dialog.generate(dialogRepository, user);
 
-        user.addDialog(generatedDialog.getDialogName());
+        user.addDialog(generatedDialog.getDialogId());
         userRepository.save(user);
 
         systemDialogAssertion("created", generatedDialog);
@@ -83,7 +83,7 @@ public class ConferenceController extends BaseController {
                     dialogFromDataBase);
             dialogRepository.save(dialogFromDataBase);
 
-            toInviteUser.addDialog(dialogFromDataBase.getDialogName());
+            toInviteUser.addDialog(dialogFromDataBase.getDialogId());
             userRepository.save(toInviteUser);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponseObject(e.getMessage()), HttpStatus.FORBIDDEN);
@@ -119,7 +119,7 @@ public class ConferenceController extends BaseController {
             dialogFromDataBase.deleteUser(user_id);
             dialogRepository.save(dialogFromDataBase);
 
-            userToKick.deleteDialog(dialogFromDataBase.getDialogName());
+            userToKick.deleteDialog(dialogFromDataBase.getDialogId());
             userRepository.save(userToKick);
 
             log.info("succes kick from conference");
@@ -155,7 +155,7 @@ public class ConferenceController extends BaseController {
             dialogFromDataBase.deleteUser(username);
             dialogRepository.save(dialogFromDataBase);
 
-            userFromDataBase.deleteDialog(dialogFromDataBase.getDialogName());
+            userFromDataBase.deleteDialog(dialogFromDataBase.getDialogId());
             userRepository.save(userFromDataBase);
 
             log.info("user " + userFromDataBase.getUsername() + " leave from " + dialogFromDataBase.getDialogId());

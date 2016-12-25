@@ -90,7 +90,18 @@ public class ConferenceControllerTest extends BaseControllerForAllTests {
         assertTrue(batya2.getDialogList().size() == 0);
 
         batyaConfs = dialogRepository.findByOwner("BATYA2");
+
         assertTrue(!batyaConfs.get(0).getUserNameList().contains("BATYA"));
+        mockMvc.perform(get("/BATTOKEN2/conferences/" + batyaConfs
+                .get(0).getDialogId() + "/kick/" + "BATYA2"))
+                .andExpect(status().isOk());
+        User batya1 = userRepository.findByUsername("BATYA2");
+
+        mockMvc.perform(get("/BATTOKEN2/contacts"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        System.out.println("kek");
     }
 
     @Test

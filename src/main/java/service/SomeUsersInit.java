@@ -143,8 +143,8 @@ public class SomeUsersInit {
                 "IliaGulkov",
                 messageRepository);
         Dialog dialog = Dialog.generate(dialogRepository, i);
-        i.addDialog(dialog.getDialogName());
-        d.addDialog(dialog.getDialogName());
+        i.addDialog(dialog.getDialogId());
+        d.addDialog(dialog.getDialogId());
         dialog.addUser(d.getUsername());
         Message helloTOCONF = Message.getFromJSONinput(new JSONInputRequestMessage("text", "helloDanil"),
                 "IlilaGulkov",

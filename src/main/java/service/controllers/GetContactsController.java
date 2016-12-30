@@ -148,6 +148,8 @@ public class GetContactsController extends BaseController {
                 .sorted(Comparator.comparingLong(x -> loginUserMap.get(x).getTimestamp()))
                 .collect(Collectors.toList());
 
+        Collections.reverse(strings);
+
         for (int i = offset; i < loginUserMap.keySet().size() && i - offset < DEFAULT_COUNT_OF_CONTACTS; i++) {
             String message = strings.get(i);
             DialogMessageInResponse d;

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
+@Table(name = "\"user\"")
 public class User implements Storage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

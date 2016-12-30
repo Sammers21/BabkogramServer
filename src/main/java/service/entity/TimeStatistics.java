@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "\"time_statistics\"")
 public class TimeStatistics {
 
     @Id

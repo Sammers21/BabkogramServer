@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
+@Table(name = "\"dialog\"")
 public class Dialog implements Serializable, Storage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

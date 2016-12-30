@@ -13,6 +13,7 @@ import java.util.Set;
 import static service.controllers.SendMessageController.genereteGuid;
 
 @Entity
+@Table(name = "\"message\"")
 public class Message implements Comparable, Serializable {
 
     @Id
